@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import logoPng from "../../../public/images/logo.png";
+import logoPng from "@/images/logo.png";
 import { Button, Input } from '@heroui/react';
 import Image from 'next/image';
 

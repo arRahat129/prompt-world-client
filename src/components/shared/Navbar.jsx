@@ -1,13 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@heroui/react";
-import logoPng from "../../../public/images/logo.png";
+import { Avatar, Button, Skeleton } from "@heroui/react";
+import logoPng from "@/images/logo.png";
 import Image from "next/image";
 import { useState } from "react";
+import { authClient, signOut, useSession } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const router = useRouter();
+
+    const { data: session, isPending } = useSession();
+    // console.log("watch the outputs", {session, isPending});
+
+    const user = session?.user;
+    // console.log(user);
+
+    const handleSignOut = async () => {
+        await signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push("/auth/signin");
+                    router.refresh();
+                }
+            }
+        });
+    };
 
     const navLinks = [
         {
@@ -34,7 +54,6 @@ export default function Navbar() {
                         height={25}
                         className="object-contain"
                     />
-
                     <div className="hidden leading-none sm:block">
                         <h1 className="text-2xl font-bold text-blue-900 dark:text-blue-400 tracking-wide">
                             Prompt World
@@ -62,23 +81,49 @@ export default function Navbar() {
                     {/* Vertical Divider (Desktop Only) */}
                     <div className="hidden md:block h-6 w-px bg-slate-200 dark:bg-slate-600" />
 
-                    {/* Desktop Action Buttons */}
+                    {/* Desktop Action Buttons / Auth State */}
                     <div className="hidden md:flex items-center gap-4">
-                        <Link
-                            href="/login"
-                            className="text-sm font-medium text-blue-600 dark:text-blue-400 transition hover:text-blue-700 dark:hover:text-blue-500"
-                        >
-                            Login
-                        </Link>
-
-                        <Link href="/register">
-                            <Button
-                                radius="lg"
-                                className="h-11 bg-blue-600 dark:bg-blue-100 px-6 text-sm font-semibold text-white dark:text-blue-700 hover:bg-blue-700 shadow-md shadow-blue-200"
-                            >
-                                Get Started
-                            </Button>
-                        </Link>
+                        {isPending ? (
+                            <Skeleton className="flex h-10 w-10 rounded-full" />
+                        ) : !user ? (
+                            <>
+                                <Link
+                                    href="/auth/signin"
+                                    className="text-sm font-medium text-blue-600 dark:text-blue-400 transition hover:text-blue-700 dark:hover:text-blue-500"
+                                >
+                                    Login
+                                </Link>
+                                <Link href="/auth/signup">
+                                    <Button
+                                        radius="lg"
+                                        className="h-11 bg-blue-600 dark:bg-blue-100 px-6 text-sm font-semibold text-white dark:text-blue-700 hover:bg-blue-700 shadow-md shadow-blue-200"
+                                    >
+                                        Get Started
+                                    </Button>
+                                </Link>
+                            </>
+                        ) : (
+                            <div className="flex items-center gap-4">
+                                <Button
+                                    onClick={handleSignOut}
+                                    variant="danger"
+                                    radius="lg"
+                                    className="text-sm font-medium"
+                                >
+                                    Sign Out
+                                </Button>
+                                <Avatar className="h-10 w-10">
+                                    <Avatar.Image
+                                        alt={user.name || "User Avatar"}
+                                        src={user.image || ""}
+                                        referrerPolicy="no-referrer"
+                                    />
+                                    <Avatar.Fallback>
+                                        {user.name ? user.name[0].toUpperCase() : "U"}
+                                    </Avatar.Fallback>
+                                </Avatar>
+                            </div>
+                        )}
                     </div>
 
                     {/* MOBILE MENU BUTTON */}
@@ -104,13 +149,12 @@ export default function Navbar() {
             {isMenuOpen && (
                 <div className="border-t border-blue-50 dark:border-blue-800 bg-white dark:bg-gray-900 md:hidden">
                     <div className="space-y-3 px-4 py-6">
-                        {/* Navigation Links */}
                         <ul className="space-y-2">
                             {navLinks.map((link) => (
                                 <li key={link.href}>
                                     <Link
                                         href={link.href}
-                                        className="block rounded-xl px-4 py-3 text-base font-medium text-slate-600 dark:text-slate-200 transition hover:bg-blue-50/50 dark:hover:bg-blue-50/50 hover:text-blue-600 dark:hover:text-blue-800"
+                                        className="block rounded-xl px-4 py-3 text-base font-medium text-slate-600 dark:text-slate-200 transition hover:bg-blue-50/50 hover:text-blue-600"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         {link.label}
@@ -119,25 +163,58 @@ export default function Navbar() {
                             ))}
                         </ul>
 
-                        {/* Divider */}
-                        <div className="border-t border-blue-50 pt-4">
+                        <div className="border-t border-blue-50 pt-4 dark:border-blue-800">
                             <div className="flex flex-col gap-3">
-                                <Link
-                                    href="/login"
-                                    className="rounded-xl px-4 py-3 text-center text-base font-medium text-blue-600 transition hover:bg-blue-50/50"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    Login
-                                </Link>
-
-                                <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                                    <Button
-                                        radius="lg"
-                                        className="h-11 w-full bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 shadow-md shadow-blue-200"
-                                    >
-                                        Get Started
-                                    </Button>
-                                </Link>
+                                {isPending ? (
+                                    <Skeleton className="h-11 w-full rounded-xl" />
+                                ) : !user ? (
+                                    <>
+                                        <Link
+                                            href="/auth/signin"
+                                            className="rounded-xl px-4 py-3 text-center text-base font-medium text-blue-600 transition hover:bg-blue-50/50"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        >
+                                            Login
+                                        </Link>
+                                        <Link href="/auth/signup" onClick={() => setIsMenuOpen(false)}>
+                                            <Button
+                                                radius="lg"
+                                                className="h-11 w-full bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 shadow-md shadow-blue-200"
+                                            >
+                                                Get Started
+                                            </Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center justify-between bg-slate-50 dark:bg-gray-800/50 p-3 rounded-xl">
+                                        <div className="flex items-center gap-3">
+                                            <Avatar className="h-10 w-10">
+                                                <Avatar.Image
+                                                    alt={user.name || "User Avatar"}
+                                                    src={user.image || ""}
+                                                    referrerPolicy="no-referrer"
+                                                />
+                                                <Avatar.Fallback>
+                                                    {user.name ? user.name[0].toUpperCase() : "U"}
+                                                </Avatar.Fallback>
+                                            </Avatar>
+                                            <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate max-w-30">
+                                                {user.name}
+                                            </span>
+                                        </div>
+                                        <Button
+                                            onClick={() => {
+                                                handleSignOut();
+                                                setIsMenuOpen(false);
+                                            }}
+                                            variant="danger"
+                                            radius="lg"
+                                            size="sm"
+                                        >
+                                            Sign Out
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
