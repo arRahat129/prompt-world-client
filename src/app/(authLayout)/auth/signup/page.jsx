@@ -3,11 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button, Input } from "@heroui/react";
-import { FiUser, FiMail, FiLink, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiUser, FiMail, FiLink, FiLock, FiEye, FiEyeOff, FiCompass, FiHome } from "react-icons/fi";
 import { FaGoogle, FaWandMagicSparkles } from "react-icons/fa6";
 import { signUp } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { Description, Label, Radio, RadioGroup } from "@heroui/react";
+import Image from "next/image";
+import logoPng from "@/images/logo.png"
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -86,7 +88,43 @@ export default function Register() {
     };
 
     return (
-        <div className="relative min-h-[calc(100vh-5rem)] flex items-center justify-center bg-linear-to-b from-blue-50/20 via-white to-slate-50 dark:from-black dark:via-gray-900/40 dark:to-black px-4 py-12">
+        <div className="relative min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-blue-50/20 via-white to-slate-50 dark:from-black dark:via-gray-900/40 dark:to-black px-4 py-12">
+
+            <header className="w-md mx-auto flex items-center justify-between p-4 mb-2 md:mb-4 border-b border-blue-100 dark:border-blue-900/40 rounded-2xl backdrop-blur-md">
+                <Link href="/" className="flex items-center gap-2 group">
+                    <Image
+                        src={logoPng}
+                        alt="PromptWorld Logo"
+                        width={28}
+                        height={28}
+                        className="object-contain transition-transform group-hover:scale-105"
+                    />
+                    <span className="text-xl font-bold tracking-wide text-blue-900 dark:text-blue-400">
+                        Prompt World
+                    </span>
+                </Link>
+
+                <div className="flex items-center gap-2">
+                    <Link href="/">
+                        <Button
+                            variant=""
+                            size="sm"
+                            className="font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400"
+                        >
+                            <FiHome className="text-base" /> Home
+                        </Button>
+                    </Link>
+                    <Link href="/prompts">
+                        <Button
+                            variant=""
+                            size="sm"
+                            className="font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400"
+                        >
+                            <FiCompass className="text-base" /> All Prompts
+                        </Button>
+                    </Link>
+                </div>
+            </header>
 
             {/* AMBIENT BACKGROUND GLOWS */}
             <div className="absolute top-1/4 left-1/4 -z-10 h-80 w-80 rounded-full bg-blue-400/10 dark:bg-blue-600/5 blur-[100px]" />
