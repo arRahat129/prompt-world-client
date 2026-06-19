@@ -6,6 +6,10 @@ export const getPrompts = async () => {
     return serverFetch(`/api/prompts`);
 }
 
+export const getSinglePrompt = async (promptId) => {
+    return serverFetch(`/api/prompts/${promptId}`);
+}
+
 export const filterPrompts = async (query) => {
   const result = await serverFetch(`/api/prompts?${query.toString()}`);
 

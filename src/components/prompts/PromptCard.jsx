@@ -115,14 +115,14 @@ const PromptCard = ({ prompt }) => {
                 </div>
 
                 {/* Action Button Trigger */}
-                <Button
-                    as={Link}
-                    href={`/prompts/${_id}`}
-                    className="w-full font-medium text-sm bg-sky-500 hover:bg-sky-600 text-white shadow-sm shadow-sky-500/10 transition-colors h-10 rounded-lg"
-                    endContent={<FiEye size={14} />}
-                >
-                    View Details
-                </Button>
+                <Link href={`/prompts/${_id}`}>
+                    <Button
+                        className="w-full font-medium text-sm bg-sky-500 hover:bg-sky-600 text-white shadow-sm shadow-sky-500/10 transition-colors h-10 rounded-lg"
+                        endContent={<FiEye size={14} />}
+                    >
+                        View Details
+                    </Button>
+                </Link>
             </div>
         </Card>
     );
