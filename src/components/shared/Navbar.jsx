@@ -105,7 +105,6 @@ export default function Navbar() {
                         ) : (
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    {/* FIXED: Changed from <button> to <div> to prevent nested interactive DOM error */}
                                     <div className="flex items-center gap-3 text-left cursor-pointer rounded-xl p-1 hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors">
                                         <Avatar className="h-10 w-10">
                                             <Avatar.Image

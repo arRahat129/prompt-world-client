@@ -2,8 +2,10 @@ import { Bell, Envelope, Gear, House, Magnifier, Person } from "@gravity-ui/icon
 import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
 import { VscLayoutSidebarLeft } from "react-icons/vsc";
+import SidebarFooter from "./SidebarFooter";
 
-const DashboardSidebar = () => {
+const DashboardSidebar = async () => {
+
     const navItems = [
         { icon: House, href: "/", label: "Home" },
         { icon: Magnifier, href: "/dashboard/creator/my-prompts", label: "My Prompts" },
@@ -27,26 +29,34 @@ const DashboardSidebar = () => {
 
     return (
         <>
-            <aside className="hidden w-64 shrink-0 border-r border-default p-4 md:block">
-                {navContent}
+            <aside className="hidden w-64 shrink-0 border-r border-default p-4 md:flex md:flex-col md:justify-between">
+                <div className="w-full flex flex-col gap-1">
+                    {navContent}
+                </div>
+                <div className="mt-auto border-t border-default pt-4 w-full">
+                    <SidebarFooter />
+                </div>
             </aside>
             <Drawer>
-                <Button className={'block md:hidden'} variant="secondary">
+                <Button className={'flex justify-between items-center gap-3 md:hidden'} variant="secondary">
                     <VscLayoutSidebarLeft />
                     Sidebar
                 </Button>
                 <Drawer.Backdrop>
                     <Drawer.Content placement="left">
-                        <Drawer.Dialog>
-                            <Drawer.CloseTrigger />
-                            <Drawer.Header>
-                                <Drawer.Heading>Navigation</Drawer.Heading>
-                            </Drawer.Header>
-                            <Drawer.Body>
-                                <nav className="flex flex-col gap-1">
+                        <Drawer.Dialog className="h-full flex flex-col justify-between p-4">
+                            <div>
+                                <Drawer.CloseTrigger />
+                                <Drawer.Header className="px-0 pt-2 pb-4">
+                                    <Drawer.Heading className="text-lg font-bold">Navigation</Drawer.Heading>
+                                </Drawer.Header>
+                                <Drawer.Body className="px-0 overflow-y-auto">
                                     {navContent}
-                                </nav>
-                            </Drawer.Body>
+                                </Drawer.Body>
+                            </div>
+                            <div className="mt-auto border-t border-default pt-4 w-full">
+                                <SidebarFooter />
+                            </div>
                         </Drawer.Dialog>
                     </Drawer.Content>
                 </Drawer.Backdrop>
