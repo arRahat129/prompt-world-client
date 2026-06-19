@@ -20,10 +20,46 @@ export default function Register() {
 
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
     const toggleVisibility = () => setIsVisible(!isVisible);
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            setError("File size exceeds 5MB limit");
+            return;
+        }
+
+        setIsUploading(true);
+        setError("");
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API;
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                setImage(data.data.url);
+            } else {
+                setError("Upload failed. Please try again.");
+            }
+        } catch (err) {
+            setError("Network error occurred during image upload.");
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
@@ -48,12 +84,14 @@ export default function Register() {
 
         setIsLoading(true);
 
+        const finalImageUrl = image.trim() || "https://i.ibb.co.com/216mxB4J/user-Sample.png";
+
         try {
             const { error: authError } = await signUp.email({
                 email,
                 password,
                 name,
-                image,
+                image: finalImageUrl,
                 role,
             });
 
@@ -210,22 +248,43 @@ export default function Register() {
                         />
                     </div>
 
-                    {/* Photo URL Input Field */}
-                    <div className="flex flex-col gap-1.5">
+                    {/* Photo Input Field */}
+                    <div className="flex flex-col gap-1.5 w-full">
                         <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
                             <FiLink className="text-slate-400 dark:text-slate-500" />
-                            Avatar Photo URL
+                            Avatar Photo
                         </label>
-                        <Input
-                            type="url"
-                            name="photoUrl"
-                            value={image}
-                            onChange={(e) => setImage(e.target.value)}
-                            placeholder="Upload an image"
-                            radius="lg"
-                            variant="bordered"
-                            className="w-full border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-gray-950 text-slate-800 dark:text-white focus-within:border-blue-500"
-                        />
+                        <div className="flex items-center gap-4 mt-1 p-3 border border-slate-200 dark:border-slate-800 rounded-xl">
+                            <label className="w-14 h-14 border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-gray-900/40 rounded-xl flex flex-col items-center justify-center cursor-pointer transition-colors group relative overflow-hidden shrink-0">
+                                <input
+                                    type="file"
+                                    accept="image/png, image/jpeg"
+                                    onChange={handleImageUpload}
+                                    className="hidden"
+                                />
+                                {image ? (
+                                    <img src={image} alt="Avatar Preview" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 text-lg font-light">+</span>
+                                )}
+                            </label>
+                            <div className="flex flex-col">
+                                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    {isUploading ? 'Uploading picture...' : image ? 'Image uploaded!' : 'Choose avatar picture'}
+                                </span>
+                                <span className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">PNG, JPG up to 5MB</span>
+                            </div>
+                        </div>
+
+                        {image && !isUploading && (
+                            <button
+                                type="button"
+                                onClick={() => setImage("")}
+                                className="text-xs font-medium text-red-500 hover:text-red-600 hover:underline px-2 py-1 transition"
+                            >
+                                Remove
+                            </button>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-4">

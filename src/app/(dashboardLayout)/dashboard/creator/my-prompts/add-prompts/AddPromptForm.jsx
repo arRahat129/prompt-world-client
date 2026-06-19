@@ -60,7 +60,7 @@ export default function AddPromptForm() {
         const payload = {
             ...data,
             copyCount: 0,
-            status: "pending",
+            status: "active",
             creatorId: user?.id,
             creatorEmail: user?.email,
             creatorName: user?.name,

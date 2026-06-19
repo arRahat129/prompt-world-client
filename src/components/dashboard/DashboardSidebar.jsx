@@ -9,7 +9,7 @@ const DashboardSidebar = () => {
         { icon: Magnifier, href: "/dashboard/creator/my-prompts", label: "My Prompts" },
         { icon: Bell, href: "/dashboard/creator/my-prompts/add-prompts", label: "Add Prompt" },
         { icon: Envelope, href: "/dashboard/creator", label: "Dashboard" },
-        { icon: Person, href: "/dashboard/my-prompts", label: "Profile" },
+        { icon: Person, href: "/dashboard/creator/my-profile", label: "Profile" },
         { icon: Gear, href: "/dashboard/my-prompts", label: "Settings" },
     ];
 

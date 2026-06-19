@@ -1,17 +1,21 @@
 'use server';
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+import { serverMutation } from "../core/server";
 
-export const createPrompt = async (newPromptData) => {
-    console.log(newPromptData)
-    const res = await fetch(`${baseUrl}/api/prompts`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newPromptData)
-    });
-
-    const data = await res.json();
-    return data;
+export const createPrompt = async(newPromptData) => {
+    return serverMutation('/api/prompts', newPromptData);
 }
+
+// export const createPrompt = async (newPromptData) => {
+//     console.log(newPromptData)
+//     const res = await fetch(`${baseUrl}/api/prompts`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(newPromptData)
+//     });
+
+//     const data = await res.json();
+//     return data;
+// }
