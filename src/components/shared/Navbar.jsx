@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Avatar, Button, Skeleton } from "@heroui/react";
+import { Avatar, Button, Dropdown, Skeleton } from "@heroui/react";
 import logoPng from "@/images/logo.png";
 import Image from "next/image";
 import { useState } from "react";
@@ -103,26 +103,43 @@ export default function Navbar() {
                                 </Link>
                             </>
                         ) : (
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    onClick={handleSignOut}
-                                    variant="danger"
-                                    radius="lg"
-                                    className="text-sm font-medium"
-                                >
-                                    Sign Out
-                                </Button>
-                                <Avatar className="h-10 w-10">
-                                    <Avatar.Image
-                                        alt={user.name || "User Avatar"}
-                                        src={user.image || ""}
-                                        referrerPolicy="no-referrer"
-                                    />
-                                    <Avatar.Fallback>
-                                        {user.name ? user.name[0].toUpperCase() : "U"}
-                                    </Avatar.Fallback>
-                                </Avatar>
-                            </div>
+                            <Dropdown>
+                                <Dropdown.Trigger>
+                                    {/* FIXED: Changed from <button> to <div> to prevent nested interactive DOM error */}
+                                    <div className="flex items-center gap-3 text-left cursor-pointer rounded-xl p-1 hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors">
+                                        <Avatar className="h-10 w-10">
+                                            <Avatar.Image
+                                                alt={user.name || "User Avatar"}
+                                                src={user.image || ""}
+                                                referrerPolicy="no-referrer"
+                                            />
+                                            <Avatar.Fallback>
+                                                {user.name ? user.name[0].toUpperCase() : "U"}
+                                            </Avatar.Fallback>
+                                        </Avatar>
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 max-w-28 truncate leading-tight">
+                                                {user.name}
+                                            </span>
+                                            <span className="text-xs text-slate-400 dark:text-slate-500 max-w-28 truncate leading-none mt-0.5">
+                                                {user.email}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Dropdown.Trigger>
+                                <Dropdown.Popover>
+                                    <Dropdown.Menu aria-label="User contextual menu items">
+                                        <Dropdown.Item key="dashboard" textValue="Dashboard">
+                                            <Link href="/dashboard/creator" className="block w-full text-sm font-medium text-slate-700 dark:text-slate-200">
+                                                Dashboard
+                                            </Link>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item key="logout" textValue="Logout" variant="danger" onClick={handleSignOut}>
+                                            <span className="text-sm font-medium">Log Out</span>
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown.Popover>
+                            </Dropdown>
                         )}
                     </div>
 
@@ -186,34 +203,51 @@ export default function Navbar() {
                                         </Link>
                                     </>
                                 ) : (
-                                    <div className="flex items-center justify-between bg-slate-50 dark:bg-gray-800/50 p-3 rounded-xl">
-                                        <div className="flex items-center gap-3">
-                                            <Avatar className="h-10 w-10">
-                                                <Avatar.Image
-                                                    alt={user.name || "User Avatar"}
-                                                    src={user.image || ""}
-                                                    referrerPolicy="no-referrer"
-                                                />
-                                                <Avatar.Fallback>
-                                                    {user.name ? user.name[0].toUpperCase() : "U"}
-                                                </Avatar.Fallback>
-                                            </Avatar>
-                                            <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate max-w-30">
-                                                {user.name}
-                                            </span>
-                                        </div>
-                                        <Button
-                                            onClick={() => {
-                                                handleSignOut();
-                                                setIsMenuOpen(false);
-                                            }}
-                                            variant="danger"
-                                            radius="lg"
-                                            size="sm"
-                                        >
-                                            Sign Out
-                                        </Button>
-                                    </div>
+                                    <Dropdown className="w-full">
+                                        <Dropdown.Trigger>
+                                            <div className="flex w-full items-center justify-between text-left bg-slate-50 dark:bg-gray-800/50 p-3 rounded-xl cursor-pointer">
+                                                <div className="flex items-center gap-3">
+                                                    <Avatar className="h-10 w-10">
+                                                        <Avatar.Image
+                                                            alt={user.name || "User Avatar"}
+                                                            src={user.image || ""}
+                                                            referrerPolicy="no-referrer"
+                                                        />
+                                                        <Avatar.Fallback>
+                                                            {user.name ? user.name[0].toUpperCase() : "U"}
+                                                        </Avatar.Fallback>
+                                                    </Avatar>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate max-w-[180px]">
+                                                            {user.name}
+                                                        </span>
+                                                        <span className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[180px]">
+                                                            {user.email}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </div>
+                                        </Dropdown.Trigger>
+                                        <Dropdown.Popover className="w-[calc(100vw-32px)]">
+                                            <Dropdown.Menu aria-label="Mobile User menu selections">
+                                                <Dropdown.Item key="dashboard" textValue="Dashboard">
+                                                    <Link
+                                                        href="/da/creatorshboard"
+                                                        className="block w-full text-base font-medium text-slate-700 dark:text-slate-200"
+                                                        onClick={() => setIsMenuOpen(false)}
+                                                    >
+                                                        Dashboard
+                                                    </Link>
+                                                </Dropdown.Item>
+                                                <Dropdown.Item key="logout" textValue="Logout" variant="danger" onClick={() => { handleSignOut(); setIsMenuOpen(false); }}>
+                                                    <span className="text-base font-medium">Log Out</span>
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown.Popover>
+                                    </Dropdown>
                                 )}
                             </div>
                         </div>
