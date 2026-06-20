@@ -2,7 +2,9 @@ import React from 'react';
 import { FiEyeOff } from "react-icons/fi";
 import PromptReviewForm from '../subscription/PromptReviewForm';
 
-const PromptReviewSection = ({ prompt, isLocked, isCreatorViewer, isOwner }) => {
+const PromptReviewSection = async ({ prompt, isLocked, isCreatorViewer, isOwner }) => {
+    // console.log(prompt);
+
     const isRestricted = isCreatorViewer && !isOwner;
 
     return (
@@ -34,7 +36,7 @@ const PromptReviewSection = ({ prompt, isLocked, isCreatorViewer, isOwner }) => 
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
                         {/* Standard Action Input Card */}
-                        {!isOwner && <PromptReviewForm isLocked={isLocked} />}
+                        {!isOwner && <PromptReviewForm isLocked={isLocked} promptId={prompt?._id} />}
 
                         {/* Standard Empty Feed Module */}
                         <div className={`${isOwner ? "md:col-span-12" : "md:col-span-7"} w-full h-full flex flex-col justify-center items-center text-center p-8 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/20 min-h-65`}>

@@ -3,17 +3,68 @@
 import React, { useState } from 'react';
 import { Button } from "@heroui/react";
 import { FiStar, FiSend, FiLock } from "react-icons/fi";
+import { useSession } from '@/lib/auth-client';
+import toast from 'react-hot-toast';
+import { createReview } from '@/lib/actions/reviews';
 
-const PromptReviewForm = ({ isLocked }) => {
+const PromptReviewForm = ({ isLocked, promptId }) => {
+    const { data: session } = useSession();
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isLocked || rating === 0) return;
+        if (isLocked || isSubmitting) {
+            return;
+        }
 
-        console.log({ rating, comment });
-        // Handle your review submission dispatch here
+        // console.log({ rating, comment });
+
+        if (!session?.user) {
+            toast.error("Authentication Error: You must be logged in to leave reviews.");
+            return;
+        }
+
+        if (rating === 0) {
+            toast.error("Please pick a rating score before submitting.");
+            return;
+        }
+
+        if (!comment.trim()) {
+            toast.error("Please write a comment summarizing your evaluation experience.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        const loadingToast = toast.loading("Saving your community review...");
+
+        const finalReviewPayload = {
+            promptId: promptId,
+            rating: Number(rating),
+            comment: comment.trim(),
+            reviewerId: session?.user?.id,
+            reviewerName: session?.user?.name || "Anonymous Developer",
+            reviewerImage: session?.user?.image || ""
+        };
+
+        try {
+            const res = await createReview(finalReviewPayload);
+
+            if (res.success) {
+                toast.success("Review submitted successfully!", { id: loadingToast });
+                console.log("Form submitted! Here is your payload:", finalReviewPayload);
+                setRating(0);
+                setComment('');
+            } else {
+                toast.error(res.message || "Failed to submit review.", { id: loadingToast });
+            }
+        } catch (error) {
+            console.error("Submission log track error:", error);
+            toast.error("Network communication failure. Please check your log lines.", { id: loadingToast });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -48,10 +99,10 @@ const PromptReviewForm = ({ isLocked }) => {
                                 <FiStar
                                     key={i}
                                     size={20}
-                                    onClick={() => setRating(starValue)}
+                                    onClick={() => !isSubmitting && setRating(starValue)}
                                     className={`cursor-pointer transition-all hover:scale-110 active:scale-95 ${isFilled
-                                            ? 'text-amber-500 fill-amber-500 drop-shadow-[0_0_4px_rgba(245,158,11,0.2)]'
-                                            : 'text-zinc-400 dark:text-zinc-600 fill-transparent'
+                                        ? 'text-amber-500 fill-amber-500 drop-shadow-[0_0_4px_rgba(245,158,11,0.2)]'
+                                        : 'text-zinc-400 dark:text-zinc-600 fill-transparent'
                                         }`}
                                 />
                             );
@@ -74,11 +125,11 @@ const PromptReviewForm = ({ isLocked }) => {
 
                 <Button
                     type="submit"
-                    disabled={isLocked || rating === 0}
+                    isLoading={isSubmitting}
+                    disabled={isLocked || rating === 0 || isSubmitting}
                     className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-zinc-300 dark:disabled:bg-zinc-800 disabled:text-zinc-500 text-white font-semibold text-xs h-11 rounded-xl transition-colors shadow-md"
-                    endContent={<FiSend size={12} />}
                 >
-                    Submit Review
+                    {!isSubmitting && <FiSend size={12} />} {isSubmitting ? "Submitting..." : "Submit Review"}
                 </Button>
             </form>
         </div>
