@@ -34,10 +34,10 @@ const PromptReviewSection = ({ prompt, isLocked, isCreatorViewer, isOwner }) => 
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
                         {/* Standard Action Input Card */}
-                        <PromptReviewForm isLocked={isLocked} />
+                        {!isOwner && <PromptReviewForm isLocked={isLocked} />}
 
                         {/* Standard Empty Feed Module */}
-                        <div className="md:col-span-7 h-full flex flex-col justify-center items-center text-center p-8 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/20 min-h-65">
+                        <div className={`${isOwner ? "md:col-span-12" : "md:col-span-7"} w-full h-full flex flex-col justify-center items-center text-center p-8 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/20 min-h-65`}>
                             <div className="w-12 h-12 rounded-xl bg-zinc-900/50 border border-zinc-800 flex items-center justify-center text-zinc-500 mb-3">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -47,7 +47,10 @@ const PromptReviewSection = ({ prompt, isLocked, isCreatorViewer, isOwner }) => 
                                 No reviews submitted yet.
                             </p>
                             <p className="text-xs text-zinc-600 mt-1">
-                                Be the first to share your verification thoughts with the developer community!
+                                {isOwner
+                                    ? "Reviews submitted by buyers and developers will appear directly in this panel."
+                                    : "Be the first to share your verification thoughts with the developer community!"
+                                }
                             </p>
                         </div>
                     </div>
