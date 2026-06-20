@@ -9,10 +9,16 @@ import { authClient, signIn } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import logoPng from "@/images/logo.png"
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const router = useRouter();
+
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirect") || "/";
 
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +49,6 @@ export default function SignIn() {
             const { error: authError } = await signIn.email({
                 email,
                 password,
-                callbackURL: "/"
             });
 
             if (authError) {
@@ -55,6 +60,7 @@ export default function SignIn() {
             setEmail("");
             setPassword("");
             toast.success(`User signed In successfully`);
+            router.push(redirectTo);
 
         } catch (err) {
             console.error(err);
@@ -243,7 +249,7 @@ export default function SignIn() {
                 {/* FOOTER LINK ALTERNATE SWITCH */}
                 <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
                     Do not have an account yet?
-                    <Link href="/auth/signup" className="ml-2 font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                    <Link href={`/auth/signup?redirect=${redirectTo}`} className="ml-2 font-semibold text-blue-600 dark:text-blue-400 hover:underline">
                         Sign Up
                     </Link>
                 </p>

@@ -3,16 +3,55 @@ import Image from 'next/image';
 import { Card, Button } from "@heroui/react";
 import {
     FiCopy, FiBookmark, FiFlag, FiCpu, FiLayers,
-    FiAward, FiEye, FiUser, FiCalendar, FiSend, FiStar
+    FiAward, FiEye, FiUser, FiCalendar, FiSend, FiStar,
+    FiLogIn,
+    FiLock
 } from "react-icons/fi";
 import { getSinglePrompt } from '@/lib/api/prompts';
 import { FaArrowLeft } from 'react-icons/fa6';
 import UserSubscriptionBtn from '@/components/subscription/UserSubscriptionBtn';
 import PromptReviewForm from '@/components/subscription/PromptReviewForm';
 import CopyButton from '@/components/CopyButton';
+import { getUserSession } from '@/lib/core/session';
+import Link from 'next/link';
 
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
+    const user = await getUserSession();
+    // console.log(user);
+
+    if (!user) {
+        return (
+            <div className="w-full min-h-[80vh] flex items-center justify-center px-4">
+                <div className="w-full max-w-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 text-center space-y-6 bg-linear-to-b from-zinc-50/50 to-transparent dark:from-zinc-900/20 shadow-xl backdrop-blur-md">
+                    <div className="mx-auto w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-900 dark:text-zinc-50 shadow-inner">
+                        <FiLock size={28} className="animate-pulse text-purple-600 dark:text-purple-400" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
+                            Authentication Required
+                        </h2>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-xs mx-auto">
+                            Join our community repository to access prompt source configurations, platform architectures, and creator tools.
+                        </p>
+                    </div>
+
+                    <div className="pt-2">
+                        <Link href={`/auth/signin?redirect=/prompts/${id}`}>
+                            <Button
+                                className="w-full bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-semibold h-11 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                                <FiLogIn size={16} />
+                                Sign In to Access
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const prompt = await getSinglePrompt(id);
 
     if (!prompt) {

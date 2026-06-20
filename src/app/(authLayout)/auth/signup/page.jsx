@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { Description, Label, Radio, RadioGroup } from "@heroui/react";
 import Image from "next/image";
 import logoPng from "@/images/logo.png"
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -17,6 +18,11 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [image, setImage] = useState("");
     const [role, setRole] = useState("user");
+
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirect") || "/";
+
+    const router = useRouter();
 
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -110,7 +116,8 @@ export default function Register() {
             setImage("");
             setRole("user");
             setPassword("");
-            toast.success(`User signed up successfully`);
+            toast.success(`User Signed up successfully`);
+            router.push('/');
 
         } catch (err) {
             console.error(err);
@@ -263,7 +270,13 @@ export default function Register() {
                                     className="hidden"
                                 />
                                 {image ? (
-                                    <img src={image} alt="Avatar Preview" className="w-full h-full object-cover" />
+                                    <Image
+                                        src={image}
+                                        alt="Avatar Preview"
+                                        fill
+                                        sizes="(max-w-7xl) 100vw"
+                                        className="object-cover"
+                                    />
                                 ) : (
                                     <span className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 text-lg font-light">+</span>
                                 )}
@@ -375,8 +388,8 @@ export default function Register() {
                 {/* FOOTER LINK ALTERNATE SWITCH */}
                 <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
                     Already have an account?
-                    <Link href="/auth/signin" className="ml-2 font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-                        Log In
+                    <Link href={`/auth/signin?redirect=${redirectTo}`} className="ml-2 font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                        Sign In
                     </Link>
                 </p>
 
