@@ -1,17 +1,44 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@heroui/react";
 import { FiStar, FiSend, FiLock } from "react-icons/fi";
 import { useSession } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
-import { createReview } from '@/lib/actions/reviews';
+import { createReview, updateReview } from '@/lib/actions/reviews';
+import { useRouter } from 'next/navigation';
 
 const PromptReviewForm = ({ isLocked, promptId }) => {
     const { data: session } = useSession();
+    const router = useRouter();
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [existingUserReview, setExistingUserReview] = useState(null);
+
+    useEffect(() => {
+        const checkExistingReview = async () => {
+            if (!session?.user?.id || !promptId) return;
+
+            try {
+                const res = await fetch(`/api/reviews?promptId=${promptId}`);
+                const data = await res.json();
+
+                if (data && Array.isArray(data)) {
+                    const match = data.find(rev => rev.reviewerId === session.user.id);
+                    if (match) {
+                        setExistingUserReview(match);
+                        setRating(match.rating);
+                        setComment(match.comment);
+                    }
+                }
+            } catch (err) {
+                console.error("Error checking existing user review history:", err);
+            }
+        };
+
+        checkExistingReview();
+    }, [session?.user?.id, promptId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,31 +64,40 @@ const PromptReviewForm = ({ isLocked, promptId }) => {
         }
 
         setIsSubmitting(true);
-        const loadingToast = toast.loading("Saving your community review...");
-
-        const finalReviewPayload = {
-            promptId: promptId,
-            rating: Number(rating),
-            comment: comment.trim(),
-            reviewerId: session?.user?.id,
-            reviewerName: session?.user?.name || "Anonymous Developer",
-            reviewerImage: session?.user?.image || ""
-        };
+        const loadingToast = toast.loading(
+            existingUserReview ? "Updating your existing review..." : "Saving your community review..."
+        );
 
         try {
-            const res = await createReview(finalReviewPayload);
+            let res;
+
+            if (existingUserReview) {
+                res = await updateReview({
+                    promptId: promptId,
+                    reviewerId: session.user.id,
+                    rating: Number(rating),
+                    comment: comment.trim()
+                });
+            } else {
+                res = await createReview({
+                    promptId: promptId,
+                    rating: Number(rating),
+                    comment: comment.trim(),
+                    reviewerId: session.user.id,
+                    reviewerName: session.user.name || "Anonymous Developer",
+                    reviewerImage: session.user.image || ""
+                });
+            }
 
             if (res.success) {
-                toast.success("Review submitted successfully!", { id: loadingToast });
-                console.log("Form submitted! Here is your payload:", finalReviewPayload);
-                setRating(0);
-                setComment('');
+                toast.success(existingUserReview ? "Review updated successfully!" : "Review submitted successfully!", { id: loadingToast });
+                router.refresh();
             } else {
-                toast.error(res.message || "Failed to submit review.", { id: loadingToast });
+                toast.error(res.message || "Failed to process review context.", { id: loadingToast });
             }
         } catch (error) {
-            console.error("Submission log track error:", error);
-            toast.error("Network communication failure. Please check your log lines.", { id: loadingToast });
+            console.error("Submission operational failure:", error);
+            toast.error("Network communication failure.", { id: loadingToast });
         } finally {
             setIsSubmitting(false);
         }
