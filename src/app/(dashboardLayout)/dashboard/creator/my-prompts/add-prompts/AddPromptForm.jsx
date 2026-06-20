@@ -160,7 +160,7 @@ export default function AddPromptForm() {
                                 <FiImage size={14} className="text-zinc-500" /> Prompt Thumbnail
                             </Label>
                             <div className="flex items-center gap-4 p-4  border border-zinc-800 rounded-lg">
-                                <label className="w-16 h-16 border border-dashed border-zinc-700 hover:border-zinc-500 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden shrink-0">
+                                <label className="relative w-16 h-16 border border-dashed border-zinc-700 hover:border-zinc-500 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden shrink-0">
                                     <input
                                         type="file"
                                         accept="image/*"
