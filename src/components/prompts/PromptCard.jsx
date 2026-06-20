@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card, Button, Chip, Avatar } from "@heroui/react";
-import { FiEye, FiLayers, FiCopy } from "react-icons/fi";
+import { FiEye, FiLayers, FiCopy, FiLock } from "react-icons/fi";
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -17,7 +17,8 @@ const PromptCard = ({ prompt }) => {
         thumbnail = "https://i.ibb.co.com/M5cvBDsV/prompt-Default-Thumbnail.webp",
         copyCount = 0,
         creatorName = "Anonymous",
-        creatorImage = "https://i.ibb.co.com/216mxB4J/user-Sample.png"
+        creatorImage = "https://i.ibb.co.com/216mxB4J/user-Sample.png",
+        visibility = "public"
     } = prompt || {};
 
     return (
@@ -25,7 +26,7 @@ const PromptCard = ({ prompt }) => {
             className="w-full bg-white dark:bg-[#0f172a] border border-zinc-200 dark:border-sky-950/40 hover:border-sky-400/50 dark:hover:border-sky-500/50 transition-all duration-300 shadow-sm hover:shadow-md text-zinc-900 dark:text-zinc-50"
             shadow="none"
         >
-            {/* Replaced Card.Body / CardBody with a clean, semantic div layout wrapper */}
+
             <div className="p-4 space-y-4 flex flex-col grow">
                 {/* Thumbnail Layer */}
                 {thumbnail && (
@@ -42,7 +43,7 @@ const PromptCard = ({ prompt }) => {
                 )}
 
                 {/* Metadata Tags Line */}
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-2">
                     <Chip
                         size="sm"
                         variant="flat"
@@ -58,16 +59,16 @@ const PromptCard = ({ prompt }) => {
                         {prompt.difficulty || "standard"}
                     </Chip>
 
-                    {/* {prompt.isPremium && (
-                        <Chip 
-                            size="sm" 
-                            variant="flat" 
-                            className="text-[10px] bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 font-bold"
+                    {visibility === "private" && (
+                        <Chip
+                            size="sm"
+                            variant="flat"
+                            className="text-[10px] bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/30 font-bold uppercase tracking-wider"
                         >
-                            PREMIUM
+                            <FiLock size={10} className="mr-0.5" /> PREMIUM
                         </Chip>
-                    )} 
-                    */}
+                    )}
+
                 </div>
 
                 {/* Content Block */}
@@ -81,7 +82,7 @@ const PromptCard = ({ prompt }) => {
                 </div>
 
                 {/* Structural Category Reference Row */}
-                <div className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide uppercase text-zinc-400 dark:text-zinc-500 pt-1">
+                <div className="flex items-center gap-2 text-[11px] font-medium tracking-wide uppercase text-zinc-400 dark:text-zinc-500 pt-1">
                     <FiLayers size={12} className="text-sky-500/70" />
                     <span>{category}</span>
                 </div>

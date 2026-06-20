@@ -7,6 +7,9 @@ import {
 } from "react-icons/fi";
 import { getSinglePrompt } from '@/lib/api/prompts';
 import { FaArrowLeft } from 'react-icons/fa6';
+import UserSubscriptionBtn from '@/components/subscription/UserSubscriptionBtn';
+import PromptReviewForm from '@/components/subscription/PromptReviewForm';
+import CopyButton from '@/components/CopyButton';
 
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
@@ -19,6 +22,8 @@ const PromptDetailsPage = async ({ params }) => {
             </div>
         );
     }
+
+    const isLocked = prompt.visibility?.toLowerCase() !== 'public';
 
     return (
         <div className="w-full min-h-screen py-12 px-4 max-w-7xl mx-auto space-y-12">
@@ -60,15 +65,37 @@ const PromptDetailsPage = async ({ params }) => {
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
                             <h3 className="text-sm font-bold uppercase tracking-wider">Prompt Template</h3>
-                            <Button
-                                size="sm"
-                                variant="outline" className="border-zinc-800 dark:border-zinc-200 font-medium rounded-lg text-xs"
-                            >
-                                <FiCopy size={13} /> Copy
-                            </Button>
+                            {!isLocked && (
+                                <CopyButton textToCopy={prompt.content} />
+                            )}
                         </div>
-                        <div className="w-full border border-purple-800 dark:border-purple-300 rounded-2xl p-6 font-mono text-sm text-purple-700 dark:text-purple-300 leading-relaxed whitespace-pre-wrap select-all">
-                            {prompt.content}
+                        <div className="relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 min-h-55 flex items-center justify-center">
+
+
+                            <div className={`w-full p-6 font-mono text-sm leading-relaxed whitespace-pre-wrap select-all transition-all duration-300 ${isLocked
+                                ? 'blur-md select-none pointer-events-none text-zinc-500 dark:text-zinc-600'
+                                : 'text-purple-700 dark:text-purple-300'
+                                }`}>
+                                {isLocked
+                                    ? "Act as a Principal Software Architect. Define a backend database schema for [domain_concept] using Mongoose validation models. Then, supply corresponding modular Express controller routes executing full CRUD routines alongside secure JWT protection token checks."
+                                    : prompt.content
+                                }
+                            </div>
+
+                            {/* Centered Premium Content Absolute Grid Overlay */}
+                            {isLocked && (
+                                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6 space-y-4 z-10">
+                                    <div className="space-y-1 max-w-md">
+                                        <h3 className="text-xl font-bold text-white tracking-tight">
+                                            Premium Prompt Content Locked
+                                        </h3>
+                                        <p className="text-xs text-zinc-300 leading-normal">
+                                            Unlock access to see this prompt, review options, and duplicate copies for a one-time upgrade.
+                                        </p>
+                                    </div>
+                                    <UserSubscriptionBtn price={5} />
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -166,36 +193,7 @@ const PromptDetailsPage = async ({ params }) => {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
 
                     {/* Write/Submit Review Panel Form Module (Left) */}
-                    <div className="md:col-span-5 bg-zinc-50 dark:bg-zinc-900/20 border border-zinc-200 dark:border-zinc-900 rounded-2xl p-6 space-y-5">
-                        <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-300">Submit a Review</h3>
-
-                        {/* Interactive Star Selection Rating Node Block */}
-                        <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Rating</label>
-                            <div className="flex items-center gap-1 text-amber-500">
-                                {[...Array(5)].map((_, i) => (
-                                    <FiStar key={i} size={18} className="fill-amber-500 cursor-pointer hover:scale-110 transition-transform" />
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Interactive Text Comment Input Field */}
-                        <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Comment</label>
-                            <textarea
-                                rows={4}
-                                placeholder="Share your experience working with this systemic prompt template instructions..."
-                                className="w-full text-sm text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-950/50 border border-zinc-300 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700 focus:border-purple-500 dark:focus:border-purple-600 rounded-xl transition-all p-3 outline-none font-sans resize-none"
-                            />
-                        </div>
-
-                        <Button
-                            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs h-11 rounded-xl transition-colors shadow-md"
-                            endContent={<FiSend size={12} />}
-                        >
-                            Submit Review
-                        </Button>
-                    </div>
+                    <PromptReviewForm isLocked={isLocked} />
 
                     {/* Existing Content Feed Dynamic Module (Right) */}
                     <div className="md:col-span-7 h-full flex flex-col justify-center items-center text-center p-8 border border-dashed border-zinc-300 dark:border-zinc-900 rounded-2xl bg-zinc-50/50 dark:bg-zinc-950/5 min-h-65">
