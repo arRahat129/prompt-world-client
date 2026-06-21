@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { createBookmark } from '@/lib/actions/bookmarks';
 
 export default function BookmarkButton({ prompt, user, promptId }) {
+    console.log(prompt);
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
@@ -31,8 +32,11 @@ export default function BookmarkButton({ prompt, user, promptId }) {
             const res = await createBookmark({
                 promptId: promptId,
                 promptTitle: prompt.title,
+                promptDescription: prompt.description,
                 userId: user.id || user._id,
-                userEmail: user.email
+                userEmail: user.email,
+                creatorName: prompt.creatorName,
+                creatorEmail: prompt.creatorEmail
             });
 
             if (res.success) {
@@ -61,8 +65,8 @@ export default function BookmarkButton({ prompt, user, promptId }) {
             <FiBookmark
                 size={16}
                 className={`transition-all duration-200 ${isBookmarked
-                        ? 'fill-black text-black dark:fill-white dark:text-white'
-                        : 'fill-transparent text-current'
+                    ? 'fill-black text-black dark:fill-white dark:text-white'
+                    : 'fill-transparent text-current'
                     }`}
             />
         </Button>

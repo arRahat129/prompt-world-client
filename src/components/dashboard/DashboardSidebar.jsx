@@ -3,16 +3,18 @@ import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
 import { VscLayoutSidebarLeft } from "react-icons/vsc";
 import SidebarFooter from "./SidebarFooter";
+import { getUserSession } from "@/lib/core/session";
 
 const DashboardSidebar = async () => {
+    const user = await getUserSession();
 
     const navItems = [
         { icon: House, href: "/", label: "Home" },
-        { icon: Magnifier, href: "/dashboard/creator/my-prompts", label: "My Prompts" },
-        { icon: Bell, href: "/dashboard/creator/my-prompts/add-prompts", label: "Add Prompt" },
-        { icon: Envelope, href: "/dashboard/creator", label: "Dashboard" },
-        { icon: Person, href: "/dashboard/creator/my-profile", label: "Profile" },
-        { icon: Gear, href: "/dashboard/my-prompts", label: "Settings" },
+        { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
+        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
+        { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Dashboard" },
+        { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
+        { icon: Gear, href: `/dashboard/${user?.role}/my-bookmarks`, label: "Bookmarks" },
     ];
 
     const navContent = navItems.map((item) => (

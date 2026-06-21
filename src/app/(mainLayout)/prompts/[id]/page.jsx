@@ -6,13 +6,13 @@ import {
     FiLock
 } from "react-icons/fi";
 import { getSinglePrompt } from '@/lib/api/prompts';
-import { FaArrowLeft } from 'react-icons/fa6';
 import { getUserSession } from '@/lib/core/session';
 import Link from 'next/link';
 import PromptContentArea from '@/components/promptDetails/PromptContentArea';
 import PromptDetailsSide from '@/components/promptDetails/PromptDetailsSide';
 import PromptReviewSection from '@/components/promptDetails/PromptReviewSection';
 import BookmarkButton from '@/components/BookmarkButton';
+import BackToPreviousPage from '@/components/BackToPreviousPage';
 
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
@@ -70,9 +70,7 @@ const PromptDetailsPage = async ({ params }) => {
 
             {/* Top Back Navigation Action Line */}
             <div className="flex items-center justify-between">
-                <button className="text-xs text-zinc-800 dark:text-zinc-400 hover:font-bold transition-colors flex items-center gap-2">
-                    <FaArrowLeft /> Back to previous page
-                </button>
+                <BackToPreviousPage />
             </div>
 
             {/* TWO COLUMN CONTENT SPLIT LAYOUT */}
