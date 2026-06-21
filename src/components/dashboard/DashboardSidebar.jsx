@@ -15,6 +15,7 @@ const DashboardSidebar = async () => {
         { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Dashboard" },
         { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
         { icon: Gear, href: `/dashboard/${user?.role}/my-bookmarks`, label: "Bookmarks" },
+        { icon: Gear, href: `/dashboard/${user?.role}/my-reviews`, label: "My Reviews" },
     ];
 
     const navContent = navItems.map((item) => (

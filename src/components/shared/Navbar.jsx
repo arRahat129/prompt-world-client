@@ -38,6 +38,10 @@ export default function Navbar() {
             label: "All Prompts",
             href: "/prompts",
         },
+        {
+            label: "Plans",
+            href:"/plans"
+        }
     ];
 
     return (

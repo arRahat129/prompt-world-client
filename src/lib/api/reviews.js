@@ -9,3 +9,13 @@ export const getReviewsByPromptId = async (promptId) => {
 
     return serverFetch(`/api/reviews?promptId=${promptId}`);
 }
+
+export const getReviewsByUserId = async (userId) => {
+    if (!userId) {
+        return [];
+    }
+
+    const response = await serverFetch(`/api/reviews/user/${userId}`);
+    
+    return response || [];
+}
