@@ -9,7 +9,7 @@ import { createReview, updateReview } from '@/lib/actions/reviews';
 import { useRouter } from 'next/navigation';
 import { getReviewsByPromptId } from '@/lib/api/reviews';
 
-const PromptReviewForm = ({ isLocked, promptId }) => {
+const PromptReviewForm = ({ isLocked, promptId, prompt }) => {
     const { data: session } = useSession();
     const router = useRouter();
     const [rating, setRating] = useState(0);
@@ -28,8 +28,6 @@ const PromptReviewForm = ({ isLocked, promptId }) => {
                     const match = data.find(rev => rev.reviewerId === session.user.id);
                     if (match) {
                         setExistingUserReview(match);
-                        setRating(match.rating);
-                        setComment(match.comment);
                     }
                 }
             } catch (err) {
@@ -69,24 +67,17 @@ const PromptReviewForm = ({ isLocked, promptId }) => {
         );
 
         try {
-            let res;
-
-            if (existingUserReview) {
-                res = await updateReview({
-                    reviewerId: existingUserReview._id,
-                    rating: Number(rating),
-                    comment: comment.trim()
-                });
-            } else {
-                res = await createReview({
-                    promptId: promptId,
-                    rating: Number(rating),
-                    comment: comment.trim(),
-                    reviewerId: session.user.id,
-                    reviewerName: session.user.name || "Anonymous Developer",
-                    reviewerImage: session.user.image || ""
-                });
-            }
+            const res = await createReview({
+                promptId: promptId,
+                promptName: prompt?.title || "Untitled Prompt",
+                promptDescription: prompt?.description || "",
+                creatorId: prompt?.creatorId || "",
+                rating: Number(rating),
+                comment: comment.trim(),
+                reviewerId: session.user.id,
+                reviewerName: session.user.name || "Anonymous Developer",
+                reviewerImage: session.user.image || ""
+            });
 
             if (res.success) {
                 toast.success(existingUserReview ? "Review updated successfully!" : "Review submitted successfully!", { id: loadingToast });
@@ -111,7 +102,7 @@ const PromptReviewForm = ({ isLocked, promptId }) => {
             {/* Conditional Lock Mask for Private Prompts */}
             {isLocked && (
                 <div className="absolute inset-0 bg-zinc-100/10 dark:bg-zinc-950/20 backdrop-blur-md flex flex-col items-center justify-center text-center p-6 z-20">
-                    <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-400 mb-2">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center mb-2">
                         <FiLock size={16} />
                     </div>
                     <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200">Reviews Locked</p>

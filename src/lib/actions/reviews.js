@@ -13,5 +13,11 @@ export const createReview = async (reviewData) => {
 }
 
 export const updateReview = async (reviewData) => {
-    return serverMutation('/api/reviews', reviewData, 'PATCH');
+    try {
+        const response = await serverMutation('/api/reviews', reviewData, 'PATCH');
+        return response;
+    } catch (error) {
+        console.error("Failed to execute review update mutation:", error);
+        return { success: false, message: "Network synchronization error." };
+    }
 }

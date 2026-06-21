@@ -25,7 +25,7 @@ export default function BookmarksDisplay({ initialBookmarks, user }) {
             });
 
             if (res.success && !res.isBookmarked) {
-                toast.success("Removed from bookmarks");
+                toast.success(`${item.promptTitle} has been Removed from your bookmarks`);
                 setBookmarks(prev => prev.filter(b => b.promptId !== item.promptId));
                 router.refresh();
             } else {
@@ -91,8 +91,7 @@ export default function BookmarksDisplay({ initialBookmarks, user }) {
                     <Card.Footer className="px-6 py-4 bg-zinc-50/50 dark:bg-zinc-900/20 border-t border-zinc-100 dark:border-zinc-900/60 flex items-center justify-between gap-3">
                         <Button
                             size="sm"
-                            variant="outline"
-                            color="danger"
+                            variant="danger"
                             disabled={isRemovingId !== null}
                             onClick={() => handleRemoveBookmark(item)}
                             className="font-medium px-3 rounded-lg"
@@ -104,7 +103,7 @@ export default function BookmarksDisplay({ initialBookmarks, user }) {
                             <Button
                                 size="sm"
                                 variant="outline"
-                                className="bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium px-4 rounded-lg shadow-xs"
+                                className="font-medium px-4 rounded-lg shadow-xs"
                             >
                                 <FiExternalLink size={14} /> View Details
                             </Button>

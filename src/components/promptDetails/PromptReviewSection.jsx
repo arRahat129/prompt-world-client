@@ -41,7 +41,7 @@ const PromptReviewSection = async ({ prompt, isLocked, isCreatorViewer, isOwner 
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
                         {/* Standard Action Input Card */}
-                        {!isOwner && <PromptReviewForm isLocked={isLocked} promptId={prompt?._id} existingReviews={reviews} />}
+                        {!isOwner && <PromptReviewForm isLocked={isLocked} promptId={prompt?._id} prompt={prompt} existingReviews={reviews} />}
 
                         {/* Standard Empty Feed Module */}
                         <div className={`${isOwner ? "md:col-span-12" : "md:col-span-7"} space-y-4 w-full`}>
@@ -50,7 +50,7 @@ const PromptReviewSection = async ({ prompt, isLocked, isCreatorViewer, isOwner 
                                     {reviews.map((review) => (
                                         <div
                                             key={review._id}
-                                            className="p-5 bg-zinc-900/30 border border-zinc-800 rounded-2xl space-y-3 transition-all hover:border-zinc-700/60"
+                                            className="p-5 border border-zinc-800 rounded-2xl space-y-3 transition-all hover:border-zinc-700/60"
                                         >
                                             <div className="flex items-center justify-between gap-4">
                                                 {/* Reviewer Profile */}
@@ -65,7 +65,7 @@ const PromptReviewSection = async ({ prompt, isLocked, isCreatorViewer, isOwner 
                                                         />
                                                     </div>
                                                     <div>
-                                                        <h4 className="text-xs font-bold text-zinc-200">{review.reviewerName}</h4>
+                                                        <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">{review.reviewerName}</h4>
                                                         <p className="text-[10px] text-zinc-500">
                                                             {review.createdAt ? (
                                                                 new Date(review.createdAt).toLocaleString(undefined, {
@@ -92,20 +92,20 @@ const PromptReviewSection = async ({ prompt, isLocked, isCreatorViewer, isOwner 
                                             </div>
 
                                             {/* Content Comment Text Block */}
-                                            <p className="text-sm text-zinc-300 font-sans leading-relaxed wrap-break-word whitespace-pre-wrap pl-1">
+                                            <p className="text-sm text-zinc-700 dark:text-zinc-300 font-sans leading-relaxed wrap-break-word whitespace-pre-wrap pl-1">
                                                 {review.comment}
                                             </p>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="w-full flex flex-col justify-center items-center text-center p-8 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/20 min-h-65">
-                                    <div className="w-12 h-12 rounded-xl bg-zinc-900/50 border border-zinc-800 flex items-center justify-center text-zinc-500 mb-3">
+                                <div className="w-full flex flex-col justify-center items-center text-center p-8 border border-dashed border-zinc-800 rounded-2xl min-h-65">
+                                    <div className="w-12 h-12 rounded-xl border border-zinc-800 flex items-center justify-center text-zinc-800 dark:text-zinc-200 mb-3">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                         </svg>
                                     </div>
-                                    <p className="text-sm font-medium text-zinc-400">
+                                    <p className="text-sm font-medium">
                                         No reviews submitted yet.
                                     </p>
                                     <p className="text-xs text-zinc-600 mt-1">
