@@ -59,6 +59,14 @@ export default function SidebarFooter() {
                 </div>
             </div>
 
+            {user.role && (
+                <div className="flex items-center px-1">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700/60">
+                        {user.role}
+                    </span>
+                </div>
+            )}
+
             <Button
                 size="sm"
                 variant="ghost"

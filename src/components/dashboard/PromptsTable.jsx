@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Table, Button } from "@heroui/react";
 import Link from "next/link";
 import { FiEdit2, FiTrash2, FiCopy, FiInbox, FiPlus, FiEye } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 export default function PromptsTable({ initialPrompts }) {
     const [prompts, setPrompts] = useState(initialPrompts || "");
@@ -15,7 +16,7 @@ export default function PromptsTable({ initialPrompts }) {
         setIsDeleting(id);
         try {
             setPrompts(prompts.filter(p => p._id !== id));
-            alert("Prompt layout purged successfully.");
+            toast.success("Prompt layout purged successfully.");
         } catch (error) {
             console.error(error);
         } finally {

@@ -234,7 +234,7 @@ export default function Navbar() {
                                             <Dropdown.Menu aria-label="Mobile User menu selections">
                                                 <Dropdown.Item key="dashboard" textValue="Dashboard">
                                                     <Link
-                                                        href="/da/creatorshboard"
+                                                        href="/dashboard/creator"
                                                         className="block w-full text-base font-medium text-slate-700 dark:text-slate-200"
                                                         onClick={() => setIsMenuOpen(false)}
                                                     >

@@ -1,22 +1,18 @@
 import React from 'react';
-import Image from 'next/image';
-import { Card, Button } from "@heroui/react";
+import { Button } from "@heroui/react";
 import {
-    FiCopy, FiBookmark, FiFlag, FiCpu, FiLayers,
-    FiAward, FiEye, FiUser, FiCalendar, FiSend, FiStar,
+    FiFlag,
     FiLogIn,
     FiLock
 } from "react-icons/fi";
 import { getSinglePrompt } from '@/lib/api/prompts';
 import { FaArrowLeft } from 'react-icons/fa6';
-import UserSubscriptionBtn from '@/components/subscription/UserSubscriptionBtn';
-import PromptReviewForm from '@/components/subscription/PromptReviewForm';
-import CopyButton from '@/components/CopyButton';
 import { getUserSession } from '@/lib/core/session';
 import Link from 'next/link';
 import PromptContentArea from '@/components/promptDetails/PromptContentArea';
 import PromptDetailsSide from '@/components/promptDetails/PromptDetailsSide';
 import PromptReviewSection from '@/components/promptDetails/PromptReviewSection';
+import BookmarkButton from '@/components/BookmarkButton';
 
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
@@ -92,9 +88,9 @@ const PromptDetailsPage = async ({ params }) => {
                                 {prompt.title}
                             </h1>
                             <div className="flex gap-2">
-                                <Button isIconOnly variant="outline" className="border-zinc-800 dark:border-zinc-200 rounded-xl">
-                                    <FiBookmark size={16} />
-                                </Button>
+
+                                <BookmarkButton prompt={prompt} user={user} promptId={id} />
+                                
                                 <Button isIconOnly variant="outline" className="border-zinc-800 dark:border-zinc-200 rounded-xl">
                                     <FiFlag size={16} />
                                 </Button>
