@@ -7,6 +7,7 @@ import { useSession } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 import { createReview, updateReview } from '@/lib/actions/reviews';
 import { useRouter } from 'next/navigation';
+import { getReviewsByPromptId } from '@/lib/api/reviews';
 
 const PromptReviewForm = ({ isLocked, promptId }) => {
     const { data: session } = useSession();
@@ -21,8 +22,7 @@ const PromptReviewForm = ({ isLocked, promptId }) => {
             if (!session?.user?.id || !promptId) return;
 
             try {
-                const res = await fetch(`/api/reviews?promptId=${promptId}`);
-                const data = await res.json();
+                const data = await getReviewsByPromptId(promptId);
 
                 if (data && Array.isArray(data)) {
                     const match = data.find(rev => rev.reviewerId === session.user.id);
@@ -73,8 +73,7 @@ const PromptReviewForm = ({ isLocked, promptId }) => {
 
             if (existingUserReview) {
                 res = await updateReview({
-                    promptId: promptId,
-                    reviewerId: session.user.id,
+                    reviewerId: existingUserReview._id,
                     rating: Number(rating),
                     comment: comment.trim()
                 });
@@ -91,7 +90,10 @@ const PromptReviewForm = ({ isLocked, promptId }) => {
 
             if (res.success) {
                 toast.success(existingUserReview ? "Review updated successfully!" : "Review submitted successfully!", { id: loadingToast });
-                router.refresh();
+                setRating(0);
+                setComment('');
+                setExistingUserReview(null);
+                router.push(`/prompts/${promptId}`);
             } else {
                 toast.error(res.message || "Failed to process review context.", { id: loadingToast });
             }
