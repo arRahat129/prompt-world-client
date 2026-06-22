@@ -1,3 +1,5 @@
+'use server';
+
 import { serverFetch } from "../core/server";
 
 export const getUserBookmarks = async (userId) => {

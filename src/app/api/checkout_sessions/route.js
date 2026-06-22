@@ -1,23 +1,38 @@
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
+import { PLAN_PRICE_ID, stripe } from '@/lib/stripe';
+import { getUserSession } from '@/lib/core/session';
 
-import { stripe } from '../../../lib/stripe'
-
-export async function POST() {
+export async function POST(req) {
     try {
         const headersList = await headers()
         const origin = headersList.get('origin')
 
+        const formData = await req.formData();
+        const planId = formData.get('plan_id');
+        const priceId = PLAN_PRICE_ID[planId];
+
+        if (!priceId) {
+            return NextResponse.json(
+                { error: `Invalid or missing Price ID for plan: ${planId}` },
+                { status: 400 }
+            );
+        }
+
+        const user = await getUserSession();
+
         // Create Checkout Sessions from body params.
         const session = await stripe.checkout.sessions.create({
+            customer_email: user?.email,
             line_items: [
                 {
                     // Provide the exact Price ID (for example, price_1234) of the product you want to sell
-                    price: 'price_1TkoK6F0NtNAg1PIJYgRoj6U',
+                    price: priceId,
                     quantity: 1,
                 },
             ],
             mode: 'payment',
+            metadata: { planId },
             success_url: `${origin}/plans/success?session_id={CHECKOUT_SESSION_ID}`,
         });
         return NextResponse.redirect(session.url, 303)

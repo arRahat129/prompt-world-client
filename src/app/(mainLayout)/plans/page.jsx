@@ -1,7 +1,7 @@
 "use client";
 
+import BackToPreviousPage from '@/components/BackToPreviousPage';
 import React, { useState } from 'react';
-import { Button } from '@heroui/react';
 import { FiCheck, FiUser, FiBriefcase, FiHelpCircle, FiChevronDown } from 'react-icons/fi';
 
 export default function PlansPage() {
@@ -17,6 +17,7 @@ export default function PlansPage() {
         user: [
             {
                 name: "Free",
+                id: 'user_free',
                 price: "$0",
                 period: "/forever",
                 description: "Essential features for getting started and organizing your initial search tracking.",
@@ -33,12 +34,13 @@ export default function PlansPage() {
             },
             {
                 name: "Pro Visibility",
+                id: 'user_pro',
                 price: "$5",
-                period: "/month",
+                period: "/forever",
                 description: "Our most popular option for serious active candidates looking to rapidly accelerate landing a role.",
                 icon: <FiCheck size={18} className="text-primary" />,
                 features: [
-                    "Apply to up to 30 jobs per month",
+                    "see all prompts public or private forever",
                     "Unlimited saved jobs",
                     "Advanced application tracking dashboard",
                     "Comprehensive salary insights"
@@ -51,6 +53,7 @@ export default function PlansPage() {
         creator: [
             {
                 name: "Free Creator",
+                id: 'creator_free',
                 price: "$0",
                 period: "/forever",
                 description: "Standard creator sandbox tools to list items inside our public prompt repository ecosystem.",
@@ -67,8 +70,9 @@ export default function PlansPage() {
             },
             {
                 name: "Pro-Creator",
+                id: 'creator_pro',
                 price: "$5",
-                period: "/month",
+                period: "/forever",
                 description: "Expanded allocation built for expanding creators with active multi-departmental tracks.",
                 icon: <FiCheck size={18} className="text-primary" />,
                 features: [
@@ -198,19 +202,33 @@ export default function PlansPage() {
 
                             {/* Plan Action CTA Callout */}
                             <div className="mt-8">
-                                <form action="/api/checkout_sessions" method="POST">
-                                    <section>
-                                        <button type="submit" role="link" className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${plan.popular
-                                            ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
-                                            : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
-                                            }`}>
-                                            Checkout
+                                {plan.price === "$0" ? (
+                                    <button
+                                        disabled
+                                        className="block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl bg-zinc-800/40 text-zinc-500 border border-zinc-800 cursor-not-allowed"
+                                    >
+                                        {plan.isCurrent ? "Current Active Plan" : "Get Started"}
+                                    </button>
+                                ) : (
+                                    <form action="/api/checkout_sessions" method="POST">
+                                        <input type="hidden" name="plan_id" value={plan.id} />
+                                        <button
+                                            type="submit"
+                                            className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${plan.isPopular // Fixed: changed from plan.popular to plan.isPopular to match your data structure
+                                                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
+                                                : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
+                                                }`}
+                                        >
+                                            Upgrade Plan
                                         </button>
-                                    </section>
-                                </form>
+                                    </form>
+                                )}
                             </div>
                         </div>
                     ))}
+                </div>
+                <div className='flex justify-end mt-[-5] mb-5'>
+                    <BackToPreviousPage />
                 </div>
 
                 {/* FAQ Accordion Section Layout Wrapper */}

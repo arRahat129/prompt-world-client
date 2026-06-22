@@ -73,6 +73,8 @@ export default function Register() {
         setError("");
         setSuccess("");
 
+        const plan = role === 'user' ? 'user_free' : 'creator_free';
+
         if (!name.trim()) {
             setError("Name is required.");
             return;
@@ -99,6 +101,7 @@ export default function Register() {
                 name,
                 image: finalImageUrl,
                 role,
+                plan
             });
 
             if (authError) {

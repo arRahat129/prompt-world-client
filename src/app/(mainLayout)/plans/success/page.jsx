@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { FiCheckCircle, FiArrowRight, FiMail } from 'react-icons/fi';
 import { stripe } from '@/lib/stripe';
 import { HiShieldCheck } from 'react-icons/hi2';
+import { metadata } from '@/app/layout';
+import { createPayment } from '@/lib/actions/plans';
 
 export default async function Success({ searchParams }) {
     const { session_id } = await searchParams;
@@ -23,6 +25,18 @@ export default async function Success({ searchParams }) {
     }
 
     if (status === 'complete') {
+        // update the user table about the plan
+        const planId = session?.metadata?.planId;
+
+        const payInfo = {
+            email: customerEmail,
+            planId: planId
+        }
+
+        const result = await createPayment(payInfo);
+        console.log(result);
+
+
         return (
             <div className="w-full min-h-screen flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 bg-background">
                 <div className="max-w-md w-full relative">

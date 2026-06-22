@@ -25,7 +25,7 @@ const BackToPreviousPage = ({ fallbackHref = "/prompts" }) => {
                 onClick={handleBackClick}
                 size="sm"
                 variant="outline"
-                className="text-xs text-zinc-800 dark:text-zinc-400 hover:font-bold transition-all px-0 bg-transparent min-w-0 h-auto gap-2"
+                className="text-xs text-zinc-800 dark:text-zinc-400 hover:font-bold transition-all px-4 py-2 bg-transparent min-w-0 h-auto gap-2"
             >
                 <FaArrowLeft size={14} /> Back to previous page
             </Button>
