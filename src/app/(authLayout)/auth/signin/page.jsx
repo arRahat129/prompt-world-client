@@ -73,13 +73,20 @@ export default function SignIn() {
 
     const handleGoogleLogin = async () => {
         try {
-            await authClient.signIn.social({
+            setError("");
+            await signIn.social({
                 provider: "google",
-                callbackURL: "/dashboard", // Update with your actual post-login route
+                callbackURL: redirectTo,
+                fetchOptions: {
+                    onSuccess: () => {
+                        toast.success("Sign In Successfully, Redirecting...");
+                    }
+                }
             });
         } catch (err) {
-            console.error(err);
-            setError("Google authentication failed.");
+            console.error("Google Sign-In Error:", err);
+            setError("Could not complete social authentication setup.");
+            toast.error("Google authentication failed");
         }
     };
 
@@ -145,12 +152,13 @@ export default function SignIn() {
                 {/* SOCIAL GOOGLE BUTTON OAUTH */}
                 <div className="space-y-4 mb-6">
                     <Button
+                        type="button"
                         onClick={handleGoogleLogin}
-                        variant="bordered"
+                        variant="outline"
                         radius="xl"
-                        className="w-full h-11 border-slate-200 dark:border-slate-800 bg-white dark:bg-gray-900 font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800/50 flex items-center justify-center gap-2.5 transition"
+                        className="w-full border-slate-200 dark:border-slate-800 bg-white dark:bg-gray-900 font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800/50 flex items-center justify-center gap-2 transition"
                     >
-                        <FaGoogle className="h-4 w-4 text-slate-700 dark:text-slate-300" />
+                        <FaGoogle className="h-3.5 w-3.5 text-blue-500" />
                         <span>Continue with Google</span>
                     </Button>
 

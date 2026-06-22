@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button, Input } from "@heroui/react";
 import { FiUser, FiMail, FiLink, FiLock, FiEye, FiEyeOff, FiCompass, FiHome } from "react-icons/fi";
 import { FaGoogle, FaWandMagicSparkles } from "react-icons/fa6";
-import { signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { Description, Label, Radio, RadioGroup } from "@heroui/react";
 import Image from "next/image";
@@ -131,8 +131,23 @@ export default function Register() {
         }
     };
 
-    const handleGoogleLogin = () => {
-        console.log("Initiating Google Auth Sign-In...");
+    const handleGoogleLogin = async () => {
+        try {
+            setError("");
+            await signIn.social({
+                provider: "google",
+                callbackURL: redirectTo,
+                fetchOptions: {
+                    onSuccess: () => {
+                        toast.success("Sign Up Succesfully, Redirecting...");
+                    }
+                }
+            });
+        } catch (err) {
+            console.error("Google Sign-In Error:", err);
+            setError("Could not complete social authentication setup.");
+            toast.error("Google authentication failed");
+        }
     };
 
     return (
@@ -197,16 +212,16 @@ export default function Register() {
                 {/* SOCIAL GOOGLE BUTTON OAUTH */}
                 <div className="space-y-4 mb-6">
                     <Button
+                        type="button"
                         onClick={handleGoogleLogin}
-                        variant="bordered"
+                        variant="outline"
                         radius="xl"
-                        className="w-full h-11 border-slate-200 dark:border-slate-800 bg-white dark:bg-gray-900 font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800/50 flex items-center justify-center gap-2.5 transition"
+                        className="w-full border-slate-200 dark:border-slate-800 bg-white dark:bg-gray-900 font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800/50 flex items-center justify-center gap-2 transition"
                     >
-                        <FaGoogle className="h-4 w-4 text-slate-700 dark:text-slate-300" />
+                        <FaGoogle className="h-3.5 w-3.5 text-blue-500" />
                         <span>Continue with Google</span>
                     </Button>
 
-                    {/* TEXT SEPARATOR DIVIDER */}
                     <div className="relative flex items-center justify-center py-2">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-slate-200 dark:border-slate-800" />
