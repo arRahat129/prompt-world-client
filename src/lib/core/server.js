@@ -1,3 +1,5 @@
+'use server';
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const serverFetch = async (path) => {
@@ -13,6 +15,12 @@ export const serverMutation = async (path, data, method = "POST") => {
         },
         body: JSON.stringify(data)
     });
+
+    if (!res.ok) {
+        const errorText = await res.text();
+        console.error(`Backend Mutation Error (${res.status}):`, errorText);
+        throw new Error(`Server returned status ${res.status}`);
+    }
 
     return res.json();
 }
