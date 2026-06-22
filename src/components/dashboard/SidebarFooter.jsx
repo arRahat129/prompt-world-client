@@ -41,36 +41,35 @@ export default function SidebarFooter() {
             <div className="flex items-center gap-3 p-1 text-left">
                 <Avatar className="h-10 w-10 shrink-0 rounded-xl">
                     <Avatar.Image
-                        alt={user.name || "User Profile Avatar"}
-                        src={user.image || ""}
+                        alt={user?.name || "User Profile Avatar"}
+                        src={user?.image || ""}
                         referrerPolicy="no-referrer"
                     />
                     <Avatar.Fallback>
-                        {user.name ? user.name[0].toUpperCase() : "U"}
+                        {user?.name ? user?.name[0].toUpperCase() : "U"}
                     </Avatar.Fallback>
                 </Avatar>
                 <div className="flex flex-col min-w-0">
                     <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate leading-tight">
-                        {user.name}
+                        {user?.name}
                     </span>
                     <span className="text-xs text-slate-400 dark:text-slate-500 truncate mt-0.5 leading-none">
-                        {user.email}
+                        {user?.email}
                     </span>
                 </div>
             </div>
 
-            {user.role && (
+            {user?.role && (
                 <div className="flex items-center px-1">
                     <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700/60">
-                        {user.role}
+                        {user?.role}
                     </span>
                 </div>
             )}
 
             <Button
                 size="sm"
-                variant="ghost"
-                color="danger"
+                variant="danger"
                 onClick={handleSignOut}
                 className="w-full justify-start gap-2.5 px-3 py-2 h-9 rounded-xl text-xs font-semibold"
             >

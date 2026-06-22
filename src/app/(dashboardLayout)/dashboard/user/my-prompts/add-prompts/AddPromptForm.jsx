@@ -110,7 +110,7 @@ export default function AddPromptForm() {
         // console.log(res)
         if (res.insertedId) {
             toast.success("Prompt saved successfully!");
-            redirect("/dashboard/creator/my-prompts");
+            redirect(`/dashboard/${user?.role}/my-prompts`);
         }
     };
 

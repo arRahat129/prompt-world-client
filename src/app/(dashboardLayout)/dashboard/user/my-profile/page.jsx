@@ -6,9 +6,12 @@ import {
 } from 'react-icons/fi';
 import { FaGem } from 'react-icons/fa6';
 import { getUserSession } from '@/lib/core/session';
+import { getCreatorPrompts } from '@/lib/api/prompts';
 
 const MyProfile = async () => {
     const user = await getUserSession();
+    const myPrompts = await getCreatorPrompts(user?.id);
+    const totalPrompts = myPrompts.length;
 
     // Unauthenticated State
     if (!user) {
@@ -114,7 +117,7 @@ const MyProfile = async () => {
                                     Total Prompts Created
                                 </span>
                                 <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                                    {user?.totalPrompts || '0'}
+                                    {totalPrompts || '0'}
                                 </span>
                             </div>
                         </div>

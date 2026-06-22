@@ -1,65 +1,16 @@
-import { Bell, Envelope, Gear, House, Magnifier, Person } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
-import Link from "next/link";
 import { VscLayoutSidebarLeft } from "react-icons/vsc";
 import SidebarFooter from "./SidebarFooter";
 import { getUserSession } from "@/lib/core/session";
+import SidebarLinks from "./SidebarLinks";
 
 const DashboardSidebar = async () => {
     const user = await getUserSession();
 
-    const userNavlinks = [
-        { icon: House, href: "/", label: "Home" },
-        { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Dashboard" },
-        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
-        { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
-        { icon: Gear, href: `/dashboard/${user?.role}/my-bookmarks`, label: "Saved Prompts" },
-        { icon: Gear, href: `/dashboard/${user?.role}/my-reviews`, label: "My Reviews" },
-        { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
-    ];
-
-    const creatorNavlinks = [
-        { icon: House, href: "/", label: "Home" },
-        { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Creator Home" },
-        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
-        { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
-    ];
-
-    const adminNavlinks = [
-        { icon: House, href: "/", label: "Home" },
-        { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Analytics" },
-        { icon: Person, href: `/dashboard/${user?.role}/all-users`, label: "All Users" },
-        { icon: Magnifier, href: `/dashboard/${user?.role}/all-prompts`, label: "All Prompts" },
-        { icon: Gear, href: `/dashboard/${user?.role}/all-payments`, label: "All Payments" },
-        { icon: Bell, href: `/dashboard/${user?.role}/reported-prompts`, label: "Reported Prompts" },
-    ];
-
-    const navLinksMap = {
-        user: userNavlinks,
-        creator: creatorNavlinks,
-        admin: adminNavlinks
-    }
-
-    const navItems = navLinksMap[user?.role || 'user'];
-
-    const navContent = navItems.map((item) => (
-        <Link href={item.href} key={item.label}>
-            <button
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-default cursor-pointer"
-            >
-                <item.icon className="size-5 text-muted" />
-                {item.label}
-            </button>
-        </Link>
-    ))
-
-
     return (
         <>
             <aside className="hidden w-64 shrink-0 border-r border-default p-4 md:flex md:flex-col md:justify-between">
-                <div className="w-full flex flex-col gap-1">
-                    {navContent}
-                </div>
+                <SidebarLinks user={user} />
                 <div className="mt-auto border-t border-default pt-4 w-full">
                     <SidebarFooter />
                 </div>
@@ -78,7 +29,7 @@ const DashboardSidebar = async () => {
                                     <Drawer.Heading className="text-lg font-bold">Navigation</Drawer.Heading>
                                 </Drawer.Header>
                                 <Drawer.Body className="px-0 overflow-y-auto">
-                                    {navContent}
+                                    <SidebarLinks user={user} />
                                 </Drawer.Body>
                             </div>
                             <div className="mt-auto border-t border-default pt-4 w-full">
