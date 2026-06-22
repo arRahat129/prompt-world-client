@@ -3,11 +3,16 @@ import { FiEyeOff, FiStar } from "react-icons/fi";
 import PromptReviewForm from '../subscription/PromptReviewForm';
 import { getReviewsByPromptId } from '@/lib/api/reviews';
 import Image from 'next/image';
+import { getUserSession } from '@/lib/core/session';
 
 const PromptReviewSection = async ({ prompt, isLocked, isCreatorViewer, isOwner }) => {
     // console.log(prompt);
+    const user = await getUserSession();
+    console.log(user);
 
-    const isRestricted = isCreatorViewer && !isOwner;
+    const isProUser = user?.plan?.toLowerCase() === 'user_pro';
+
+    const isRestricted = isCreatorViewer && !isOwner && !isProUser;
 
     const reviews = await getReviewsByPromptId(prompt?._id);
     const totalReviews = Array.isArray(reviews) ? reviews.length : 0;

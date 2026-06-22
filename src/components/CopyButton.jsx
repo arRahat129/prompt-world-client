@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@heroui/react';
 import { FiCopy, FiCheck } from 'react-icons/fi';
+import toast from 'react-hot-toast';
 
 const CopyButton = ({ textToCopy }) => {
     const [copied, setCopied] = useState(false);
@@ -11,6 +12,7 @@ const CopyButton = ({ textToCopy }) => {
         try {
             await navigator.clipboard.writeText(textToCopy);
             setCopied(true);
+            toast.success('Prompt Content Copied to Clipboard');
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             console.error('Failed to copy text: ', err);

@@ -44,6 +44,12 @@ export default function Navbar() {
         }
     ];
 
+    const dashboardLinks = {
+        user: '/dashboard/user',
+        creator: '/dashboard/creator',
+        admin: '/dashboard/admin'
+    }
+
     return (
         /* Lightened background with a soft blue backdrop blur and border */
         <nav className="sticky top-0 z-50 border-b border-blue-50 bg-white dark:bg-black/150 backdrop-blur-xl">
@@ -133,7 +139,7 @@ export default function Navbar() {
                                 <Dropdown.Popover>
                                     <Dropdown.Menu aria-label="User contextual menu items">
                                         <Dropdown.Item key="dashboard" textValue="Dashboard">
-                                            <Link href="/dashboard/creator" className="block w-full text-sm font-medium text-slate-700 dark:text-slate-200">
+                                            <Link href={dashboardLinks[user?.role || 'user']} className="block w-full text-sm font-medium text-slate-700 dark:text-slate-200">
                                                 Dashboard
                                             </Link>
                                         </Dropdown.Item>
@@ -238,7 +244,7 @@ export default function Navbar() {
                                             <Dropdown.Menu aria-label="Mobile User menu selections">
                                                 <Dropdown.Item key="dashboard" textValue="Dashboard">
                                                     <Link
-                                                        href="/dashboard/creator"
+                                                        href={dashboardLinks[user?.role || 'user']}
                                                         className="block w-full text-base font-medium text-slate-700 dark:text-slate-200"
                                                         onClick={() => setIsMenuOpen(false)}
                                                     >

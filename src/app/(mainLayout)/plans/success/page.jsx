@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { FiCheckCircle, FiArrowRight, FiMail } from 'react-icons/fi';
 import { stripe } from '@/lib/stripe';
 import { HiShieldCheck } from 'react-icons/hi2';
-import { metadata } from '@/app/layout';
 import { createPayment } from '@/lib/actions/plans';
+import { getUserSession } from '@/lib/core/session';
 
 export default async function Success({ searchParams }) {
     const { session_id } = await searchParams;
+    const user = await getUserSession();
 
     if (!session_id) {
         throw new Error('Please provide a valid session_id (`cs_test_...`)');
@@ -78,7 +79,7 @@ export default async function Success({ searchParams }) {
                         {/* Action Redirection Links */}
                         <div className="w-full flex flex-col gap-3">
                             <Link
-                                href="/dashboard"
+                                href={`/dashboard/${user?.role}`}
                                 className="w-full h-11 bg-primary text-primary-foreground font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition tracking-wide"
                             >
                                 Go to Dashboard

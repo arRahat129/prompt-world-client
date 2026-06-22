@@ -1,33 +1,37 @@
 import React from 'react';
 import UserSubscriptionBtn from '../subscription/UserSubscriptionBtn';
 import CopyButton from '../CopyButton';
+import { getUserSession } from '@/lib/core/session';
 
-const PromptContentArea = ({ prompt, isLocked }) => {
+const PromptContentArea = async ({ prompt, isLocked }) => {
+
+    const shouldLockContent = isLocked;
+    
     return (
         <>
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
                     <h3 className="text-sm font-bold uppercase tracking-wider">Prompt Template</h3>
                     {
-                        !isLocked &&
+                        !shouldLockContent &&
                         <CopyButton textToCopy={prompt.content} />
                     }
                 </div>
                 <div className="relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 min-h-55 flex items-center justify-center">
-                    <div className={`w-full p-6 font-mono text-sm leading-relaxed whitespace-pre-wrap select-all transition-all duration-300 ${isLocked
+                    <div className={`w-full p-6 font-mono text-sm leading-relaxed whitespace-pre-wrap select-all transition-all duration-300 ${shouldLockContent
                         ? 'blur-md select-none pointer-events-none text-zinc-500 dark:text-zinc-600'
                         : 'text-purple-700 dark:text-purple-300'
                         }`}
                     >
                         {
-                            isLocked
+                            shouldLockContent
                                 ? "Act as a Principal Software Architect. Define a backend database schema for [domain_concept] using Mongoose validation models. Then, supply corresponding modular Express controller routes executing full CRUD routines alongside secure JWT protection token checks."
                                 : prompt.content
                         }
                     </div>
 
                     {
-                        isLocked && (
+                        shouldLockContent && (
                             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6 space-y-4 z-10">
                                 <div className="space-y-1 max-w-md">
                                     <h3 className="text-xl font-bold text-white tracking-tight">

@@ -63,7 +63,9 @@ const PromptDetailsPage = async ({ params }) => {
 
     const isOwner = user.email === prompt.creatorEmail;
     const isCreatorViewer = user.role?.toLowerCase() === 'creator';
-    const isLocked = prompt.visibility?.toLowerCase() !== 'public' && !isOwner;
+    const isProUser = user?.plan?.toLowerCase() === 'user_pro';
+
+    const isLocked = prompt.visibility?.toLowerCase() !== 'public' && !isOwner && !isProUser;
 
     return (
         <div className="w-full min-h-screen py-12 px-4 max-w-7xl mx-auto space-y-12">
@@ -104,7 +106,7 @@ const PromptDetailsPage = async ({ params }) => {
 
                 {/* RIGHT SIDEBAR METRICS COLUMN (1/3 width) */}
                 <div>
-                    <PromptDetailsSide prompt={prompt} isLocked={isLocked} isCreatorViewer={isCreatorViewer} />
+                    <PromptDetailsSide prompt={prompt} isOwner={isOwner} isCreatorViewer={isCreatorViewer} />
                 </div>
             </div>
 

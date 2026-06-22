@@ -2,11 +2,14 @@
 
 import React from 'react';
 import { Button } from "@heroui/react";
+import { useRouter } from 'next/navigation';
 
 const UserSubscriptionBtn = ({ price }) => {
+    const router = useRouter();
+    
     const handleSubscription = () => {
-        // Integrate your payment gateway routing or API dispatch logic here
         console.log(`Initiating subscription logic for $${price}`);
+        router.push('/plans');
     };
 
     return (

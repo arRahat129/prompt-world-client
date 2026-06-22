@@ -8,15 +8,39 @@ import { getUserSession } from "@/lib/core/session";
 const DashboardSidebar = async () => {
     const user = await getUserSession();
 
-    const navItems = [
+    const userNavlinks = [
         { icon: House, href: "/", label: "Home" },
-        { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
-        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
         { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Dashboard" },
-        { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
-        { icon: Gear, href: `/dashboard/${user?.role}/my-bookmarks`, label: "Bookmarks" },
+        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
+        { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
+        { icon: Gear, href: `/dashboard/${user?.role}/my-bookmarks`, label: "Saved Prompts" },
         { icon: Gear, href: `/dashboard/${user?.role}/my-reviews`, label: "My Reviews" },
+        { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
     ];
+
+    const creatorNavlinks = [
+        { icon: House, href: "/", label: "Home" },
+        { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Creator Home" },
+        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
+        { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
+    ];
+
+    const adminNavlinks = [
+        { icon: House, href: "/", label: "Home" },
+        { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Analytics" },
+        { icon: Person, href: `/dashboard/${user?.role}/all-users`, label: "All Users" },
+        { icon: Magnifier, href: `/dashboard/${user?.role}/all-prompts`, label: "All Prompts" },
+        { icon: Gear, href: `/dashboard/${user?.role}/all-payments`, label: "All Payments" },
+        { icon: Bell, href: `/dashboard/${user?.role}/reported-prompts`, label: "Reported Prompts" },
+    ];
+
+    const navLinksMap = {
+        user: userNavlinks,
+        creator: creatorNavlinks,
+        admin: adminNavlinks
+    }
+
+    const navItems = navLinksMap[user?.role || 'user'];
 
     const navContent = navItems.map((item) => (
         <Link href={item.href} key={item.label}>
