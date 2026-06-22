@@ -95,7 +95,7 @@ export default function AddPromptForm() {
             ...data,
             thumbnail: finalThumbnail,
             copyCount: 0,
-            status: "approved",
+            status:"pending",
             creatorId: user?.id,
             creatorEmail: user?.email,
             creatorName: user?.name,
@@ -109,7 +109,7 @@ export default function AddPromptForm() {
         const res = await createPrompt(payload);
         // console.log(res)
         if (res.insertedId) {
-            toast.success("Prompt saved successfully!");
+            toast.success("Prompt saved successfully! Wait for ADMIN's Approval!!");
             redirect("/dashboard/creator/my-prompts");
         }
     };

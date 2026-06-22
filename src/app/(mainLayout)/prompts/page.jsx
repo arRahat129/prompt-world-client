@@ -13,6 +13,9 @@ const AllPromptsPage = async ({ searchParams }) => {
     const difficulty = sParams.difficulty || "";
 
     const params = new URLSearchParams();
+
+    params.set("status", "approved");
+
     if (search) {
         params.set("search", search);
     }

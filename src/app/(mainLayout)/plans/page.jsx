@@ -1,10 +1,26 @@
 "use client";
 
 import BackToPreviousPage from '@/components/BackToPreviousPage';
+import WrongRolePlanModal from '@/components/modals/WrongRolePlanModal';
+import { useSession } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { FiCheck, FiUser, FiBriefcase, FiHelpCircle, FiChevronDown } from 'react-icons/fi';
 
 export default function PlansPage() {
+    const { data: session, isPending } = useSession()
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!isPending && !session?.user?.id) {
+            router.push('/auth/signin');
+        }
+    }, [session, isPending, router]);
+
+    const userRole = session?.user?.role;
+
+
+
     const [billingTarget, setBillingTarget] = useState('user');
 
     const [openFaq, setOpenFaq] = useState(null);
@@ -17,6 +33,7 @@ export default function PlansPage() {
         user: [
             {
                 name: "Free",
+                for: 'user',
                 id: 'user_free',
                 price: "$0",
                 period: "/forever",
@@ -34,6 +51,7 @@ export default function PlansPage() {
             },
             {
                 name: "Pro Visibility",
+                for: 'user',
                 id: 'user_pro',
                 price: "$5",
                 period: "/forever",
@@ -53,6 +71,7 @@ export default function PlansPage() {
         creator: [
             {
                 name: "Free Creator",
+                for: 'creator',
                 id: 'creator_free',
                 price: "$0",
                 period: "/forever",
@@ -70,6 +89,7 @@ export default function PlansPage() {
             },
             {
                 name: "Pro-Creator",
+                for: 'creator',
                 id: 'creator_pro',
                 price: "$5",
                 period: "/forever",
@@ -135,7 +155,7 @@ export default function PlansPage() {
                                 }`}
                         >
                             <FiUser size={14} />
-                            For Job users
+                            For users
                         </button>
                         <button
                             onClick={() => setBillingTarget('creator')}
@@ -212,15 +232,19 @@ export default function PlansPage() {
                                 ) : (
                                     <form action="/api/checkout_sessions" method="POST">
                                         <input type="hidden" name="plan_id" value={plan.id} />
-                                        <button
-                                            type="submit"
-                                            className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${plan.isPopular // Fixed: changed from plan.popular to plan.isPopular to match your data structure
-                                                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
-                                                : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
-                                                }`}
-                                        >
-                                            Upgrade Plan
-                                        </button>
+                                        {
+                                            userRole !== plan.for
+                                                ? <WrongRolePlanModal plan={plan} />
+                                                : <button
+                                                    type="submit"
+                                                    className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${plan.isPopular // Fixed: changed from plan.popular to plan.isPopular to match your data structure
+                                                        ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
+                                                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
+                                                        }`}
+                                                >
+                                                    Upgrade Plan
+                                                </button>
+                                        }
                                     </form>
                                 )}
                             </div>

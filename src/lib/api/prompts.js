@@ -16,8 +16,8 @@ export const filterPrompts = async (query) => {
   return result;
 };
 
-export const getCreatorPrompts = async (creatorId, status = 'approved') => {
-    return serverFetch(`/api/prompts?creatorId=${creatorId}&status${status}`);
+export const getCreatorPrompts = async (creatorId) => {
+    return serverFetch(`/api/prompts?creatorId=${creatorId}`);
 }
 
 // export const getCreatorPrompts = async (creatorId, status = 'approved') => {

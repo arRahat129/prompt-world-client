@@ -4,6 +4,7 @@ import React from "react";
 import { Bell, Envelope, Gear, House, Magnifier, Person } from "@gravity-ui/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaPlus } from "react-icons/fa6";
 
 const SidebarLinks = ({ user }) => {
     const pathname = usePathname();
@@ -11,17 +12,17 @@ const SidebarLinks = ({ user }) => {
     const userNavlinks = [
         { icon: House, href: "/", label: "Home" },
         { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Dashboard" },
-        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
+        { icon: FaPlus, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
         { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
         { icon: Gear, href: `/dashboard/${user?.role}/my-bookmarks`, label: "Saved Prompts" },
-        { icon: Gear, href: `/dashboard/${user?.role}/my-reviews`, label: "My Reviews" },
+        { icon: Bell, href: `/dashboard/${user?.role}/my-reviews`, label: "My Reviews" },
         { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
     ];
 
     const creatorNavlinks = [
         { icon: House, href: "/", label: "Home" },
         { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Creator Home" },
-        { icon: Bell, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
+        { icon: FaPlus, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
         { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
     ];
 
