@@ -4,7 +4,7 @@ import BackToPreviousPage from '@/components/BackToPreviousPage';
 import WrongRolePlanModal from '@/components/modals/WrongRolePlanModal';
 import { useSession } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiCheck, FiUser, FiBriefcase, FiHelpCircle, FiChevronDown } from 'react-icons/fi';
 
 export default function PlansPage() {

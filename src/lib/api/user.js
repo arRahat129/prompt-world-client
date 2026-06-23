@@ -1,8 +1,8 @@
 'use server';
 
-import { serverFetch } from "../core/server";
+import { protectedFetch, serverFetch } from "../core/server";
 
 export const allUsers = async() => {
-    const result = await serverFetch('/api/user');
+    const result = await protectedFetch('/api/user');
     return result;
 }
