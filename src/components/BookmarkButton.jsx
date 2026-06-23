@@ -20,12 +20,17 @@ export default function BookmarkButton({ prompt, user, promptId }) {
             return;
         }
 
-        // Requirement 2: Check if user owns the prompt
         const isOwner = user.email === prompt.creatorEmail;
         if (isOwner) {
             toast.error("It's your prompt!");
             return;
         }
+
+        if (user?.role !== 'user') {
+            toast.error(`Only USER role holder can bokkmark. You are ${user?.role.toUpperCase()}`);
+            return;
+        }
+
 
         setIsSubmitting(true);
         try {
@@ -34,6 +39,7 @@ export default function BookmarkButton({ prompt, user, promptId }) {
                 promptTitle: prompt.title,
                 promptDescription: prompt.description,
                 userId: user.id || user._id,
+                userName: user?.name,
                 userEmail: user.email,
                 creatorName: prompt.creatorName,
                 creatorEmail: prompt.creatorEmail

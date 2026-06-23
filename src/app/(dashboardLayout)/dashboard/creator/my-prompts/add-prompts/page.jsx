@@ -14,7 +14,7 @@ export default async function AddNewPrompt() {
     console.log(user);
 
     if (!user) {
-        redirect(`/auth/signin?redirect=/dashboard/creator/add-prompt`);
+        redirect(`/auth/signin?redirect=/dashboard/${user?.role}/add-prompt`);
     }
 
     const myPrompts = await getCreatorPrompts(user?.id) || [];

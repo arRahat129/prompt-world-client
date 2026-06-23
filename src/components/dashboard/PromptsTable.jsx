@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Table, Button } from "@heroui/react";
+import { Table, Button, Card } from "@heroui/react";
 import Link from "next/link";
-import { FiEdit2, FiTrash2, FiCopy, FiInbox, FiPlus, FiEye } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiCopy, FiInbox, FiPlus, FiEye, FiCpu } from "react-icons/fi";
 import toast from "react-hot-toast";
+import RenderCardGrid from "./promptsTableComponent/RenderCardGrid";
+import ActionButtons from "./promptsTableComponent/ActionButtons";
 
-export default function PromptsTable({ initialPrompts }) {
+export default function PromptsTable({ initialPrompts, user }) {
     const [prompts, setPrompts] = useState(initialPrompts || "");
     const [isDeleting, setIsDeleting] = useState(null);
 
@@ -26,19 +28,19 @@ export default function PromptsTable({ initialPrompts }) {
 
     if (prompts.length === 0) {
         return (
-            <div className="flex flex-col items-center border border-zinc-900 justify-center p-12 text-center space-y-5">
-                <div className="w-12 h-12 rounded-full border border-zinc-800 flex items-center justify-center">
+            <div className="flex flex-col items-center border border-zinc-200 dark:border-zinc-800 justify-center p-12 text-center space-y-5 rounded-2xl">
+                <div className="w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-400">
                     <FiInbox size={20} />
                 </div>
                 <div className="space-y-1">
-                    <p className="font-medium text-base">No prompt assets found</p>
+                    <p className="font-semibold text-base text-zinc-900 dark:text-zinc-100">No prompt assets found</p>
                     <p className="text-zinc-500 text-sm max-w-sm">
                         You have not submitted any prompt configuration templates to the system index yet.
                     </p>
                 </div>
-                <Link href={"/dashboard/creator/my-prompts/add-prompts"}>
+                <Link href={`/dashboard/${user?.role}/my-prompts/add-prompts`}>
                     <Button
-                        className="bg-white text-black font-medium hover:bg-zinc-200 rounded-lg px-5 transition-colors h-10 text-sm flex items-center gap-2"
+                        className="bg-zinc-900 text-white dark:bg-white dark:text-black font-medium hover:opacity-90 rounded-lg px-5 h-10 text-sm flex items-center gap-2"
                     >
                         <FiPlus size={16} /> Add Prompt Now
                     </Button>
@@ -56,7 +58,7 @@ export default function PromptsTable({ initialPrompts }) {
                 <span className="font-semibold truncate max-w-60 block">{prompt.title}</span>
             </Table.Cell>
             <Table.Cell className="py-4 px-4 text-sm">
-                <span className="bg-zinc-900 border border-zinc-800 px-2 py-1 rounded text-xs text-zinc-300 capitalize">
+                <span className="bg-blue-50 dark:bg-blue-950/95 border border-zinc-800 px-2 py-1 rounded text-xs text-zinc-800 dark:text-zinc-300 capitalize">
                     {prompt.category}
                 </span>
             </Table.Cell>
@@ -90,110 +92,92 @@ export default function PromptsTable({ initialPrompts }) {
                 </div>
             </Table.Cell>
             <Table.Cell className="py-4 px-4 text-sm">
-                <div className="flex items-center justify-end gap-2">
-                    <Button
-                        size="sm"
-                        variant="light"
-                        className="text-zinc-400 hover:bg-zinc-800 min-w-8 w-8 h-8 p-0"
-                        onClick={() => window.location.href = `/dashboard/creator/prompts/view/${prompt._id}`}
-                    >
-                        <FiEye size={14} />
-                    </Button>
-                    <Button
-                        size="sm"
-                        variant="light"
-                        className="text-zinc-400 hover:bg-zinc-800 min-w-8 w-8 h-8 p-0"
-                        onClick={() => window.location.href = `/dashboard/creator/prompts/edit/${prompt._id}`}
-                    >
-                        <FiEdit2 size={14} />
-                    </Button>
-                    <Button
-                        size="sm"
-                        variant="light"
-                        isLoading={isDeleting === prompt._id}
-                        className="text-zinc-500 hover:text-danger hover:bg-danger-950/20 min-w-8 w-8 h-8 p-0"
-                        onClick={() => handleDelete(prompt._id)}
-                    >
-                        <FiTrash2 size={14} />
-                    </Button>
+                <div className="flex justify-end">
+                    <ActionButtons prompt={prompt} isDeleting={isDeleting} handleDelete={handleDelete} user={user} />
                 </div>
             </Table.Cell>
         </Table.Row>
     );
 
-    const tableHeaderStructure = (
-        <Table.Header>
-            <Table.Column width={280} className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Prompt Specs</Table.Column>
-            <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Category</Table.Column>
-            <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Target Tool</Table.Column>
-            <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Difficulty</Table.Column>
-            <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Status</Table.Column>
-            <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Usage</Table.Column>
-            <Table.Column align="end" className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-right px-4">Actions</Table.Column>
-        </Table.Header>
-    );
 
     return (
-        <div className="space-y-8 max-w-full">
+        <div className="space-y-10 max-w-full">
             {approvedPrompts.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <div className="flex items-center gap-2 px-1">
-                        <h2 className="text-sm font-semibold tracking-wide uppercase text-zinc-400">Approved Prompts</h2>
-                        <span className="text-xs bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full font-medium">
+                        <h2 className="text-xs font-bold tracking-widest uppercase text-zinc-400 dark:text-zinc-500">Approved Prompts</h2>
+                        <span className="text-xs font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full">
                             {approvedPrompts.length}
                         </span>
                     </div>
-                    <div className="shadow-xl rounded-xl p-4 border border-zinc-900/60 overflow-x-auto">
-                        <Table aria-label="Approved prompts index record set">
+
+                    <div className="hidden lg:block border border-blue-500/10 rounded-2xl overflow-hidden">
+                        <Table aria-label="Approved prompts index record set" className="bg-transparent shadow-none">
                             <Table.ScrollContainer>
-                                <Table.Content>
+                                <Table.Content className="bg-transparent">
                                     <Table.Header>
-                                        <Table.Column isRowHeader width={280} className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Prompt Specs</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Category</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Target Tool</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Difficulty</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Status</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Usage</Table.Column>
-                                        <Table.Column align="end" className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-right px-4">Actions</Table.Column>
+                                        <Table.Column isRowHeader width={280} className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Prompt Specs</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Category</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Target Tool</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Difficulty</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Status</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Usage</Table.Column>
+                                        <Table.Column align="end" className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-right px-4 text-zinc-400">Actions</Table.Column>
                                     </Table.Header>
-                                    <Table.Body>
+                                    <Table.Body className="bg-transparent">
                                         {approvedPrompts.map((prompt) => renderRow(prompt, false))}
                                     </Table.Body>
                                 </Table.Content>
                             </Table.ScrollContainer>
                         </Table>
                     </div>
+
+                    <RenderCardGrid
+                        items={approvedPrompts}
+                        isPendingSet={false}
+                        isDeleting={isDeleting}
+                        handleDelete={handleDelete}
+                    />
                 </div>
             )}
 
             {pendingPrompts.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <div className="flex items-center gap-2 px-1">
-                        <h2 className="text-sm font-semibold tracking-wide uppercase text-zinc-400">Pending Review</h2>
-                        <span className="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-medium">
+                        <h2 className="text-xs font-bold tracking-widest uppercase text-zinc-400 dark:text-zinc-500">Pending Review</h2>
+                        <span className="text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-0.5 rounded-full">
                             {pendingPrompts.length}
                         </span>
                     </div>
-                    <div className="shadow-xl rounded-xl p-4 border border-zinc-900/60 overflow-x-auto">
-                        <Table aria-label="Pending prompt confirmation queue">
+
+                    {/* Desktop Matrix View */}
+                    <div className="hidden lg:block border border-blue-500/10 rounded-2xl overflow-hidden">
+                        <Table aria-label="Pending prompt confirmation queue" className="bg-transparent shadow-none">
                             <Table.ScrollContainer>
-                                <Table.Content>
+                                <Table.Content className="bg-transparent">
                                     <Table.Header>
-                                        <Table.Column isRowHeader width={280} className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Prompt Specs</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Category</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Target Tool</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Difficulty</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Status</Table.Column>
-                                        <Table.Column className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-left px-4">Usage</Table.Column>
-                                        <Table.Column align="end" className="border-b border-zinc-800 font-medium text-xs tracking-wider uppercase h-12 text-right px-4">Actions</Table.Column>
+                                        <Table.Column isRowHeader width={280} className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Prompt Specs</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Category</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Target Tool</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Difficulty</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Status</Table.Column>
+                                        <Table.Column className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-left px-4 text-zinc-400">Usage</Table.Column>
+                                        <Table.Column align="end" className="border-b border-blue-500/10 font-bold text-xs tracking-wider uppercase h-12 text-right px-4 text-zinc-400">Actions</Table.Column>
                                     </Table.Header>
-                                    <Table.Body>
+                                    <Table.Body className="bg-transparent">
                                         {pendingPrompts.map((prompt) => renderRow(prompt, true))}
                                     </Table.Body>
                                 </Table.Content>
                             </Table.ScrollContainer>
                         </Table>
                     </div>
+
+                    <RenderCardGrid
+                        items={pendingPrompts}
+                        isPendingSet={true}
+                        isDeleting={isDeleting}
+                        handleDelete={handleDelete}
+                    />
                 </div>
             )}
         </div>

@@ -28,7 +28,7 @@ export const getJwtToken = async () => {
     }
 
     const data = await res.json();
-    console.log(data);
+    console.log("get token", data);
 
     return data.token;
 };

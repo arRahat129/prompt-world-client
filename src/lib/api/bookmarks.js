@@ -11,3 +11,18 @@ export const getUserBookmarks = async (userId) => {
         return [];
     }
 };
+
+export const getCreatorPromptBookmarks = async () => {
+    try {
+        const response = await serverFetch('/api/creator/bookmarks');
+
+        if (response && response.success) {
+            return response.data;
+        }
+
+        return [];
+    } catch (error) {
+        console.error("Failed to fetch creator prompt bookmarks:", error);
+        return [];
+    }
+};

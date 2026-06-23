@@ -18,12 +18,13 @@ const SidebarLinks = ({ user }) => {
         { icon: Bell, href: `/dashboard/${user?.role}/my-reviews`, label: "My Reviews" },
         { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
     ];
-
+    
     const creatorNavlinks = [
         { icon: House, href: "/", label: "Home" },
         { icon: Envelope, href: `/dashboard/${user?.role}`, label: "Creator Home" },
         { icon: FaPlus, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
         { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
+        { icon: Gear, href: `/dashboard/${user?.role}/bookmarks`, label: "Bookmarks" },
     ];
 
     const adminNavlinks = [

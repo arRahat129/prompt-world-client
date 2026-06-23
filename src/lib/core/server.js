@@ -2,7 +2,6 @@
 
 import { redirect } from "next/navigation";
 import { getJwtToken } from "./session";
-import toast from "react-hot-toast";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -16,12 +15,23 @@ export const authHeader = async () => {
     return header;
 }
 
-export const serverFetch = async (path) => {
-    const res = await fetch(`${baseUrl}${path}`);
-    return res.json();
-}
+// export const serverFetch = async (path) => {
+//     const res = await fetch(`${baseUrl}${path}`);
+//     return res.json();
+// }
 
-export const protectedFetch = async (path) => {
+// export const protectedFetch = async (path) => {
+//     const res = await fetch(`${baseUrl}${path}`, {
+//         headers: await authHeader()
+//     });
+
+
+
+//     return handleStatusCode(res);
+
+// }
+
+export const serverFetch = async (path) => {
     const res = await fetch(`${baseUrl}${path}`, {
         headers: await authHeader()
     });
