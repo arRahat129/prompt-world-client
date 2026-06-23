@@ -4,7 +4,7 @@ import CopyButton from '../CopyButton';
 import { getUserSession } from '@/lib/core/session';
 
 const PromptContentArea = async ({prompt, isLocked, user, isOwner}) => {
-    // console.log(user);
+    console.log(prompt);
 
     const isProUser = user?.plan?.toLowerCase() === 'user_pro';
     const isCreatorPro = user?.plan?.toLowerCase() === 'creator_pro';
@@ -20,7 +20,7 @@ const PromptContentArea = async ({prompt, isLocked, user, isOwner}) => {
                     <h3 className="text-sm font-bold uppercase tracking-wider">Prompt Template</h3>
                     {
                         !isCopyLocked &&
-                        <CopyButton textToCopy={prompt.content} />
+                        <CopyButton textToCopy={prompt.content} promptId={prompt._id} creatorId={prompt.creatorId} userId={user.id} />
                     }
                 </div>
                 <div className="relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 min-h-55 flex items-center justify-center">

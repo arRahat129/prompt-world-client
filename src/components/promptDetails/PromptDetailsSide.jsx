@@ -1,11 +1,48 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Card } from "@heroui/react";
 import { FiCpu, FiLayers, FiAward, FiEye, FiCopy, FiStar, FiUser, FiCalendar, FiEyeOff } from "react-icons/fi";
+import { FaStar } from 'react-icons/fa6';
+import { getReviewsByPromptId } from '@/lib/api/reviews';
 
 
 const PromptDetailsSide = ({ prompt, isOwner, isCreatorViewer }) => {
     const shouldHideStats = isCreatorViewer && !isOwner;
+
+    const [averageRating, setAverageRating] = useState(0);
+    const [totalReviewsCount, setTotalReviewsCount] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchAndCalculateReviews = async () => {
+            if (!prompt?._id) return;
+
+            try {
+                setIsLoading(true);
+                const reviews = await getReviewsByPromptId(prompt._id);
+                console.log(reviews);
+
+                if (reviews && reviews.length > 0) {
+                    const totalRatingSum = reviews.reduce((acc, review) => acc + Number(review.rating || 0), 0);
+                    const avg = totalRatingSum / reviews.length;
+
+                    setAverageRating(Number(avg.toFixed(1)));
+                    setTotalReviewsCount(reviews.length);
+                } else {
+                    setAverageRating(0);
+                    setTotalReviewsCount(0);
+                }
+            } catch (error) {
+                console.error("Failed to fetch or compute prompt reviews:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchAndCalculateReviews();
+    }, [prompt?._id]);
 
     return (
         <Card className="border border-zinc-800/80 rounded-2xl p-6 space-y-6 shadow-xl backdrop-blur-md" radius="none">
@@ -42,11 +79,21 @@ const PromptDetailsSide = ({ prompt, isOwner, isCreatorViewer }) => {
                     <div className={`space-y-4 transition-all duration-300 ${shouldHideStats ? 'blur-xs select-none pointer-events-none opacity-20' : ''}`}>
                         <div className="flex justify-between items-center py-2.5 border-b border-zinc-800/60">
                             <span className="text-zinc-700 dark:text-zinc-400 flex items-center gap-2"><FiCopy size={14} /> Copies Made</span>
-                            <span className="text-white font-bold">{prompt.copyCount || 0}</span>
+                            <span className="font-bold">{prompt.copyCount || 0}</span>
                         </div>
                         <div className="flex justify-between items-center py-2.5">
                             <span className="text-zinc-700 dark:text-zinc-400 flex items-center gap-2"><FiStar size={14} /> Community Rating</span>
-                            <span className="text-amber-500 font-bold flex items-center gap-1">★ 5.0 <span className="text-zinc-500 font-normal text-xs">(2)</span></span>
+                            <span className="text-amber-500 font-bold flex items-center gap-1">
+                                <FaStar />
+                                {isLoading ? (
+                                    <span className="text-xs text-zinc-500 font-normal animate-pulse">Loading...</span>
+                                ) : (
+                                    <>
+                                        {averageRating}
+                                        <span className="text-zinc-500 font-normal text-xs">({totalReviewsCount})</span>
+                                    </>
+                                )}
+                            </span>
                         </div>
                     </div>
 

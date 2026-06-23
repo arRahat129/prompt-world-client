@@ -18,6 +18,13 @@ export const deletePromptAdmin = async (promptId) => {
     return serverMutation(`/api/prompts/${promptId}`, {}, "DELETE");
 };
 
+// Copy count
+export const incrementPromptCopyCount = async (promptId) => {
+    return serverMutation(`/api/prompts/${promptId}/copy`, {}, "PATCH");
+};
+
+
+
 // export const createPrompt = async (newPromptData) => {
 //     console.log(newPromptData)
 //     const res = await fetch(`${baseUrl}/api/prompts`, {
