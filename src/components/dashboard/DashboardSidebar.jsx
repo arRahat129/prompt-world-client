@@ -16,9 +16,8 @@ const DashboardSidebar = async () => {
                 </div>
             </aside>
             <Drawer>
-                <Button className={'flex justify-between items-center gap-3 md:hidden'} variant="secondary">
+                <Button className={'flex justify-between items-center mx-auto md:hidden'} variant="secondary">
                     <VscLayoutSidebarLeft />
-                    Sidebar
                 </Button>
                 <Drawer.Backdrop>
                     <Drawer.Content placement="left">

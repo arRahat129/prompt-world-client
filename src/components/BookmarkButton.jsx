@@ -41,6 +41,7 @@ export default function BookmarkButton({ prompt, user, promptId }) {
                 userId: user.id || user._id,
                 userName: user?.name,
                 userEmail: user.email,
+                creatorId: prompt.creatorId,
                 creatorName: prompt.creatorName,
                 creatorEmail: prompt.creatorEmail
             });
