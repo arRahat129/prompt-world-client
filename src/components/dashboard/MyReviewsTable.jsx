@@ -26,7 +26,7 @@ export default function MyReviewsTable({ initialReviews = [] }) {
                         />
                     );
                 })}
-                <span className="text-xs text-zinc-500 font-medium ml-1">
+                <span className="text-xs text-zinc-800 dark:text-zinc-500 font-medium ml-1">
                     ({currentRating}/5)
                 </span>
             </div>
@@ -36,11 +36,11 @@ export default function MyReviewsTable({ initialReviews = [] }) {
     if (initialReviews.length === 0) {
         return (
             <div className="text-center py-16 border border-dashed border-zinc-800 rounded-xl max-w-xl mx-auto space-y-3">
-                <div className="w-10 h-10 rounded-full bg-zinc-900/50 flex items-center justify-center mx-auto text-zinc-500">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center mx-auto text-zinc-800 dark:text-zinc-500">
                     <FiMessageSquare size={18} />
                 </div>
-                <h3 className="text-sm font-semibold text-zinc-200">No reviews found</h3>
-                <p className="text-xs text-zinc-500 max-w-xs mx-auto">
+                <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">No reviews found</h3>
+                <p className="text-xs text-zinc-800 dark:text-zinc-500 max-w-xs mx-auto">
                     You haven not left any prompt marketplace evaluations yet. Your posted metrics will show up here.
                 </p>
             </div>
@@ -49,7 +49,6 @@ export default function MyReviewsTable({ initialReviews = [] }) {
 
     return (
         <>
-            {/* LARGE SCREEN TABLE MATRIX */}
             <div className="hidden md:block w-full">
                 <Table>
                     <Table.ScrollContainer>
@@ -64,10 +63,10 @@ export default function MyReviewsTable({ initialReviews = [] }) {
                                     <Table.Row key={review._id} className="border-b border-divider/40 last:border-0">
                                         <Table.Cell className="align-top py-4 max-w-60">
                                             <div className="space-y-1">
-                                                <h4 className="text-sm font-bold text-zinc-100 truncate">
+                                                <h4 className="text-sm font-bold text-zinc-800 dark:text-zinc-100 truncate">
                                                     {review.promptName || "Untitled Prompt"}
                                                 </h4>
-                                                <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
+                                                <p className="text-xs text-zinc-800 dark:text-zinc-500 line-clamp-2 leading-relaxed">
                                                     {review.promptDescription || "No prompt meta information available."}
                                                 </p>
                                             </div>
@@ -76,7 +75,7 @@ export default function MyReviewsTable({ initialReviews = [] }) {
                                             {renderStars(review.rating)}
                                         </Table.Cell>
                                         <Table.Cell className="align-top py-4">
-                                            <p className="text-xs text-zinc-300 leading-relaxed wrap-break-word whitespace-pre-wrap max-w-md">
+                                            <p className="text-xs text-zinc-800 dark:text-zinc-300 leading-relaxed wrap-break-word whitespace-pre-wrap max-w-md">
                                                 {review.comment}
                                             </p>
                                         </Table.Cell>
@@ -93,10 +92,10 @@ export default function MyReviewsTable({ initialReviews = [] }) {
                 {initialReviews.map((review) => (
                     <Card key={review._id} className="w-full border border-divider bg-content1 shadow-sm" variant="default">
                         <Card.Header className="flex flex-col items-start gap-1 pb-2">
-                            <Card.Title className="text-sm font-bold text-zinc-100 w-full truncate">
+                            <Card.Title className="text-sm font-bold text-zinc-800 dark:text-zinc-100 w-full truncate">
                                 {review.promptName || "Untitled Prompt"}
                             </Card.Title>
-                            <Card.Description className="text-xs text-zinc-500 line-clamp-2 leading-normal">
+                            <Card.Description className="text-xs text-zinc-800 dark:text-zinc-500 line-clamp-2 leading-normal">
                                 {review.promptDescription || "No prompt meta description listed."}
                             </Card.Description>
                         </Card.Header>
@@ -104,7 +103,7 @@ export default function MyReviewsTable({ initialReviews = [] }) {
                             <div className="py-1 border-t border-b border-divider/50">
                                 {renderStars(review.rating)}
                             </div>
-                            <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                            <p className="text-xs text-zinc-800 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
                                 {review.comment}
                             </p>
                         </Card.Content>
