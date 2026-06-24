@@ -3,6 +3,7 @@ import { VscLayoutSidebarLeft } from "react-icons/vsc";
 import SidebarFooter from "./SidebarFooter";
 import { getUserSession } from "@/lib/core/session";
 import SidebarLinks from "./SidebarLinks";
+import SidebarHeader from "../SidebardHeader";
 
 const DashboardSidebar = async () => {
     const user = await getUserSession();
@@ -10,6 +11,7 @@ const DashboardSidebar = async () => {
     return (
         <>
             <aside className="hidden w-64 shrink-0 border-r border-default p-4 md:flex md:flex-col md:justify-between">
+                <SidebarHeader />
                 <SidebarLinks user={user} />
                 <div className="mt-auto border-t border-default pt-4 w-full">
                     <SidebarFooter />
@@ -26,6 +28,9 @@ const DashboardSidebar = async () => {
                                 <Drawer.CloseTrigger />
                                 <Drawer.Header className="px-0 pt-2 pb-4">
                                     <Drawer.Heading className="text-lg font-bold">Navigation</Drawer.Heading>
+                                    <Drawer.Heading>
+                                        <SidebarHeader />
+                                    </Drawer.Heading>
                                 </Drawer.Header>
                                 <Drawer.Body className="px-0 overflow-y-auto">
                                     <SidebarLinks user={user} />

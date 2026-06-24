@@ -227,7 +227,7 @@ export default function PlansPage() {
                                         disabled
                                         className="block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl bg-zinc-800/40 text-zinc-500 border border-zinc-800 cursor-not-allowed"
                                     >
-                                        {plan.isCurrent ? "Current Active Plan" : "Get Started"}
+                                        {session?.user?.plan === plan.id ? "Current Active Plan" : "Get Started"}
                                     </button>
                                 ) : (
                                     <form action="/api/checkout_sessions" method="POST">
@@ -235,15 +235,21 @@ export default function PlansPage() {
                                         {
                                             userRole !== plan.for
                                                 ? <WrongRolePlanModal plan={plan} />
-                                                : <button
-                                                    type="submit"
-                                                    className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${plan.isPopular // Fixed: changed from plan.popular to plan.isPopular to match your data structure
-                                                        ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
-                                                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
-                                                        }`}
-                                                >
-                                                    Upgrade Plan
-                                                </button>
+                                                : (
+                                                    <button
+                                                        type="submit"
+                                                        // Block action if user profile already has an active paid premium tier matching this plan
+                                                        disabled={session?.user?.plan === plan.id}
+                                                        className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${session?.user?.plan === plan.id
+                                                                ? 'bg-emerald-900/30 text-emerald-400 border border-emerald-800/50 cursor-not-allowed'
+                                                                : plan.isPopular
+                                                                    ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
+                                                                    : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
+                                                            }`}
+                                                    >
+                                                        {session?.user?.plan === plan.id ? "Plan Already Activated" : "Upgrade Plan"}
+                                                    </button>
+                                                )
                                         }
                                     </form>
                                 )}

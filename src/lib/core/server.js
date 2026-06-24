@@ -33,10 +33,9 @@ export const authHeader = async () => {
 
 export const serverFetch = async (path) => {
     const res = await fetch(`${baseUrl}${path}`, {
-        headers: await authHeader()
+        headers: await authHeader(),
+        cache: 'no-store'
     });
-
-
 
     return handleStatusCode(res);
 
@@ -70,6 +69,14 @@ export const handleStatusCode = async res => {
     else if (res.status === 403) {
         redirect('/forbidden');
     }
+
+    if (!res.ok) {
+        const errorText = await res.text().catch(() => "Unknown error body");
+        console.error(`Backend API Error (${res.status}):`, errorText);
+        throw new Error(`Server returned status ${res.status}: ${errorText}`);
+    }
+
+    if (res.status === 204) return { success: true };
 
     return res.json();
 }

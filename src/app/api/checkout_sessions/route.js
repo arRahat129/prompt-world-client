@@ -21,6 +21,10 @@ export async function POST(req) {
 
         const user = await getUserSession();
 
+        if (user && user.plan !== 'user_free' && user.plan !== 'creator_free') {
+            return NextResponse.redirect(`${origin}/plans/alreadyPaid`, 303);
+        }
+
         // Create Checkout Sessions from body params.
         const session = await stripe.checkout.sessions.create({
             customer_email: user?.email,

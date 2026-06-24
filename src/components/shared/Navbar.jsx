@@ -7,9 +7,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { authClient, signOut, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import ThemeToggle from "../ThemeToggle";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const router = useRouter();
 
     const { data: session, isPending } = useSession();
@@ -40,7 +42,7 @@ export default function Navbar() {
         },
         {
             label: "Plans",
-            href:"/plans"
+            href: "/plans"
         }
     ];
 
@@ -49,6 +51,23 @@ export default function Navbar() {
         creator: '/dashboard/creator',
         admin: '/dashboard/admin'
     }
+
+    const roleBadges = {
+        admin: {
+            label: "Admin",
+            className: "bg-red-500 text-white border-red-400 font-bold uppercase text-[10px]",
+        },
+        creator: {
+            label: "Creator",
+            className: "bg-purple-600 text-white border-purple-500 font-bold uppercase text-[10px]",
+        },
+        user: {
+            label: "User",
+            className: "bg-blue-600 text-white border-blue-500 font-bold uppercase text-[10px]",
+        }
+    };
+
+    const currentRoleConfig = roleBadges[user?.role] || roleBadges['user'];
 
     return (
         /* Lightened background with a soft blue backdrop blur and border */
@@ -86,7 +105,14 @@ export default function Navbar() {
                                 </Link>
                             </li>
                         ))}
+                        <ThemeToggle
+                            isIconOnly={false}
+                            variant="outline"
+                            className="border-none"
+                        />
                     </ul>
+
+
 
                     {/* Vertical Divider (Desktop Only) */}
                     <div className="hidden md:block h-6 w-px bg-slate-200 dark:bg-slate-600" />
@@ -116,16 +142,22 @@ export default function Navbar() {
                             <Dropdown>
                                 <Dropdown.Trigger>
                                     <div className="flex items-center gap-3 text-left cursor-pointer rounded-xl p-1 hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors">
-                                        <Avatar className="h-10 w-10">
-                                            <Avatar.Image
-                                                alt={user.name || "User Avatar"}
-                                                src={user.image || ""}
-                                                referrerPolicy="no-referrer"
-                                            />
-                                            <Avatar.Fallback>
-                                                {user.name ? user.name[0].toUpperCase() : "U"}
-                                            </Avatar.Fallback>
-                                        </Avatar>
+                                        <div className="relative">
+                                            <Avatar className="h-10 w-10">
+                                                <Avatar.Image
+                                                    alt={user.name || "User Avatar"}
+                                                    src={user.image || ""}
+                                                    referrerPolicy="no-referrer"
+                                                />
+                                                <Avatar.Fallback>
+                                                    {user.name ? user.name[0].toUpperCase() : "U"}
+                                                </Avatar.Fallback>
+                                            </Avatar>
+
+                                            <span className={`absolute -top-1.5 -left-7 z-10 rounded-full px-1.5 py-0.5 text-xs tracking-wide font-bold border-2 border-white dark:border-gray-800 shadow-sm ${currentRoleConfig.className}`}>
+                                                {currentRoleConfig.label}
+                                            </span>
+                                        </div>
                                         <div className="flex flex-col">
                                             <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 max-w-28 truncate leading-tight">
                                                 {user.name}
@@ -138,13 +170,13 @@ export default function Navbar() {
                                 </Dropdown.Trigger>
                                 <Dropdown.Popover>
                                     <Dropdown.Menu aria-label="User contextual menu items">
-                                        <Dropdown.Item key="dashboard" textValue="Dashboard">
-                                            <Link href={dashboardLinks[user?.role || 'user']} className="block w-full text-sm font-medium text-slate-700 dark:text-slate-200">
+                                        <Dropdown.Item key="dashboard" className="block w-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-500 dark:hover:text-blue-200" textValue="Dashboard">
+                                            <Link href={dashboardLinks[user?.role || 'user']}>
                                                 Dashboard
                                             </Link>
                                         </Dropdown.Item>
-                                        <Dropdown.Item key="logout" textValue="Logout" variant="danger" onClick={handleSignOut}>
-                                            <span className="text-sm font-medium">Log Out</span>
+                                        <Dropdown.Item key="logout" className="text-sm font-medium hover:text-red-500 w-full" textValue="Logout" onClick={handleSignOut}>
+                                            <span>Log Out</span>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown.Popover>
@@ -189,6 +221,12 @@ export default function Navbar() {
                             ))}
                         </ul>
 
+                        <ThemeToggle
+                            isIconOnly={false}
+                            variant="outline"
+                            className="w-full"
+                        />
+
                         <div className="border-t border-blue-50 pt-4 dark:border-blue-800">
                             <div className="flex flex-col gap-3">
                                 {isPending ? (
@@ -216,21 +254,27 @@ export default function Navbar() {
                                         <Dropdown.Trigger>
                                             <div className="flex w-full items-center justify-between text-left bg-slate-50 dark:bg-gray-800/50 p-3 rounded-xl cursor-pointer">
                                                 <div className="flex items-center gap-3">
-                                                    <Avatar className="h-10 w-10">
-                                                        <Avatar.Image
-                                                            alt={user.name || "User Avatar"}
-                                                            src={user.image || ""}
-                                                            referrerPolicy="no-referrer"
-                                                        />
-                                                        <Avatar.Fallback>
-                                                            {user.name ? user.name[0].toUpperCase() : "U"}
-                                                        </Avatar.Fallback>
-                                                    </Avatar>
+                                                    <div className="relative">
+                                                        <Avatar className="h-10 w-10">
+                                                            <Avatar.Image
+                                                                alt={user.name || "User Avatar"}
+                                                                src={user.image || ""}
+                                                                referrerPolicy="no-referrer"
+                                                            />
+                                                            <Avatar.Fallback>
+                                                                {user.name ? user.name[0].toUpperCase() : "U"}
+                                                            </Avatar.Fallback>
+                                                        </Avatar>
+
+                                                        <span className={`absolute -top-1.5 -left-7 z-10 rounded-full px-1.5 py-0.5 text-xs tracking-wide font-bold border-2 border-white dark:border-gray-800 shadow-sm ${currentRoleConfig.className}`}>
+                                                            {currentRoleConfig.label}
+                                                        </span>
+                                                    </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate max-w-[180px]">
+                                                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate max-w-45">
                                                             {user.name}
                                                         </span>
-                                                        <span className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[180px]">
+                                                        <span className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-45">
                                                             {user.email}
                                                         </span>
                                                     </div>
@@ -242,17 +286,15 @@ export default function Navbar() {
                                         </Dropdown.Trigger>
                                         <Dropdown.Popover className="w-[calc(100vw-32px)]">
                                             <Dropdown.Menu aria-label="Mobile User menu selections">
-                                                <Dropdown.Item key="dashboard" textValue="Dashboard">
+                                                <Dropdown.Item key="dashboard" className="block w-full text-base font-medium text-slate-700 dark:text-slate-200 hover:text-blue-500 dark:hover:text-blue-200" textValue="Dashboard">
                                                     <Link
-                                                        href={dashboardLinks[user?.role || 'user']}
-                                                        className="block w-full text-base font-medium text-slate-700 dark:text-slate-200"
-                                                        onClick={() => setIsMenuOpen(false)}
+                                                        href={dashboardLinks[user?.role || 'user']} onClick={() => setIsMenuOpen(false)}
                                                     >
                                                         Dashboard
                                                     </Link>
                                                 </Dropdown.Item>
-                                                <Dropdown.Item key="logout" textValue="Logout" variant="danger" onClick={() => { handleSignOut(); setIsMenuOpen(false); }}>
-                                                    <span className="text-base font-medium">Log Out</span>
+                                                <Dropdown.Item key="logout" className="text-base font-medium hover:text-red-500 w-full" textValue="Logout" variant="danger" onClick={() => { handleSignOut(); setIsMenuOpen(false); }}>
+                                                    <span>Log Out</span>
                                                 </Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown.Popover>
