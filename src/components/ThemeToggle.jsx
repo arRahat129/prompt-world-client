@@ -9,25 +9,44 @@ export default function ThemeToggle({
     className = "",
     variant = "light"
 }) {
-    const [theme, setTheme] = useState(() => {
-        if (typeof window !== "undefined") {
-            return localStorage.getItem("theme") || "light";
-        }
-        return "light";
-    });
+    const [theme, setTheme] = useState("light");
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        document.documentElement.classList.toggle(
-            "dark",
-            theme === "dark"
-        );
+        const savedTheme = localStorage.getItem("theme");
 
+        const frameId = requestAnimationFrame(() => {
+            if (savedTheme && savedTheme !== "light") {
+                setTheme(savedTheme);
+            }
+            setMounted(true);
+        });
+
+        return () => cancelAnimationFrame(frameId);
+    }, []);
+
+    useEffect(() => {
+        if (!mounted) return;
+
+        document.documentElement.classList.toggle("dark", theme === "dark");
         localStorage.setItem("theme", theme);
-    }, [theme]);
+    }, [theme, mounted]);
 
     const toggleTheme = () => {
         setTheme(prev => (prev === "light" ? "dark" : "light"));
     };
+
+    if (!mounted) {
+        return (
+            <Button
+                isIconOnly={isIconOnly}
+                variant={variant}
+                className={className}
+            >
+                <div className="h-5 w-5" />
+            </Button>
+        );
+    }
 
     return (
         <Button

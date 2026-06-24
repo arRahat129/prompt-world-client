@@ -5,12 +5,23 @@ import { getJwtToken } from "./session";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
+const isNextRedirect = (error) => {
+    return error && (
+        error.message === 'NEXT_REDIRECT' || 
+        (error.digest && error.digest.startsWith('NEXT_REDIRECT'))
+    );
+};
+
 export const authHeader = async () => {
     const token = await getJwtToken();
+
+    console.log("JWT exists:", !!token);
 
     const header = token ? {
         authorization: `Bearer ${token}`
     } : {};
+
+    console.log(header);
 
     return header;
 }
@@ -32,51 +43,47 @@ export const authHeader = async () => {
 // }
 
 export const serverFetch = async (path) => {
-    const res = await fetch(`${baseUrl}${path}`, {
-        headers: await authHeader(),
-        cache: 'no-store'
-    });
+    try {
+        const res = await fetch(`${baseUrl}${path}`, {
+            headers: await authHeader(),
+            cache: 'no-store'
+        });
 
-    return handleStatusCode(res);
+        console.log(res);
 
-}
+        return await handleStatusCode(res);
+    } catch (error) {
+        if (isNextRedirect(error)) throw error;
+        throw error;
+    }
+};
 
 export const serverMutation = async (path, data, method = "POST") => {
-    const res = await fetch(`${baseUrl}${path}`, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            ... await authHeader()
-        },
-        body: JSON.stringify(data)
-    });
+    try {
+        const res = await fetch(`${baseUrl}${path}`, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                ...await authHeader()
+            },
+            body: JSON.stringify(data)
+        });
 
-    if (!res.ok) {
-        const errorText = await res.text();
-        console.error(`Backend Mutation Error (${res.status}):`, errorText);
-        throw new Error(`Server returned status ${res.status}`);
+        return await handleStatusCode(res);
+    } catch (error) {
+        if (isNextRedirect(error)) throw error;
+        throw error;
     }
+};
 
+export const handleStatusCode = async (res) => {
     console.log(res.status);
-
-    return handleStatusCode(res);
-}
-
-export const handleStatusCode = async res => {
     if (res.status === 401) {
         redirect('/unauthorized');
     }
-    else if (res.status === 403) {
+    if (res.status === 403) {
         redirect('/forbidden');
     }
 
-    if (!res.ok) {
-        const errorText = await res.text().catch(() => "Unknown error body");
-        console.error(`Backend API Error (${res.status}):`, errorText);
-        throw new Error(`Server returned status ${res.status}: ${errorText}`);
-    }
-
-    if (res.status === 204) return { success: true };
-
-    return res.json();
-}
+    return await res.json();
+};
