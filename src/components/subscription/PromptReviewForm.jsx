@@ -9,7 +9,7 @@ import { createReview, updateReview } from '@/lib/actions/reviews';
 import { useRouter } from 'next/navigation';
 import { getReviewsByPromptId } from '@/lib/api/reviews';
 
-const PromptReviewForm = ({ isLocked, promptId, prompt }) => {
+const PromptReviewForm = ({ isLocked, promptId, prompt, user }) => {
     const { data: session } = useSession();
     const router = useRouter();
     const [rating, setRating] = useState(0);
@@ -48,6 +48,11 @@ const PromptReviewForm = ({ isLocked, promptId, prompt }) => {
 
         if (!session?.user) {
             toast.error("Authentication Error: You must be logged in to leave reviews.");
+            return;
+        }
+
+        if (user?.role === 'admin') {
+            toast.error("Admin role holder are prohibited to perform any Submission!");
             return;
         }
 

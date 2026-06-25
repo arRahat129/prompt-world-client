@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 import logoPng from "@/images/logo.png"
 import { useRouter, useSearchParams } from "next/navigation";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -127,6 +128,7 @@ export default function SignIn() {
                         </Button>
                     </Link>
                 </div>
+                <ThemeToggle />
             </header>
 
             {/* AMBIENT BACKGROUND GLOWS */}

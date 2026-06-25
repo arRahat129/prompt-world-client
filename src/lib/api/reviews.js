@@ -16,6 +16,21 @@ export const getReviewsByUserId = async (userId) => {
     }
 
     const response = await serverFetch(`/api/reviews/user/${userId}`);
-    
+
     return response || [];
+}
+
+
+export const getRecentReviews = async () => {
+    try {
+        const response = await serverFetch('/api/reviews/recent');
+
+        if (response?.success) {
+            return response.data || [];
+        }
+        return [];
+    } catch (error) {
+        console.error("Failed to execute getRecentReviews action:", error);
+        return [];
+    }
 }

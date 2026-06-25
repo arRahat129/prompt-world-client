@@ -11,6 +11,7 @@ import { Description, Label, Radio, RadioGroup } from "@heroui/react";
 import Image from "next/image";
 import logoPng from "@/images/logo.png"
 import { useRouter, useSearchParams } from "next/navigation";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -187,6 +188,8 @@ export default function Register() {
                         </Button>
                     </Link>
                 </div>
+
+                <ThemeToggle />
             </header>
 
             {/* AMBIENT BACKGROUND GLOWS */}

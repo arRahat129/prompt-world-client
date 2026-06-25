@@ -7,7 +7,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 const isNextRedirect = (error) => {
     return error && (
-        error.message === 'NEXT_REDIRECT' || 
+        error.message === 'NEXT_REDIRECT' ||
         (error.digest && error.digest.startsWith('NEXT_REDIRECT'))
     );
 };
@@ -53,7 +53,7 @@ export const serverFetch = async (path) => {
 
         return await handleStatusCode(res);
     } catch (error) {
-        if (isNextRedirect(error)) throw error;
+        console.error(`Fetch failure on path [${path}]:`, error);
         throw error;
     }
 };
