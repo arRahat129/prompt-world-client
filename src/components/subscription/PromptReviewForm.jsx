@@ -5,7 +5,7 @@ import { Button } from "@heroui/react";
 import { FiStar, FiSend, FiLock } from "react-icons/fi";
 import { useSession } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
-import { createReview, updateReview } from '@/lib/actions/reviews';
+import { createReview } from '@/lib/actions/reviews';
 import { useRouter } from 'next/navigation';
 import { getReviewsByPromptId } from '@/lib/api/reviews';
 
