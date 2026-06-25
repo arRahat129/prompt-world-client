@@ -6,6 +6,7 @@ import { FiCheck, FiX, FiTrash2, FiStar, FiMail, FiLayers } from "react-icons/fi
 import toast from "react-hot-toast";
 import { approvePrompt, deletePromptAdmin, rejectPrompt } from "@/lib/actions/prompts";
 import { toggleFeaturePrompt } from "@/lib/actions/featured";
+import Image from "next/image";
 
 
 export default function AdminPromptsTable({ initialPrompts }) {
@@ -113,135 +114,252 @@ export default function AdminPromptsTable({ initialPrompts }) {
     }
 
     return (
-        <div className="shadow-xl rounded-xl p-4 border border-zinc-900/60 overflow-x-auto w-full">
-            <Table>
-                <Table.ScrollContainer>
-                    <Table.Content aria-label="System Administration Prompts Repository Dashboard Matrix">
-                        <Table.Header>
-                            <Table.Column isRowHeader width={240} className="border-b border-zinc-800 font-medium text-xs uppercase h-12 text-left px-4">Prompt Identity</Table.Column>
-                            <Table.Column className="border-b border-zinc-800 font-medium text-xs uppercase h-12 text-left px-4">Creator / Owner</Table.Column>
-                            <Table.Column className="border-b border-zinc-800 font-medium text-xs uppercase h-12 text-left px-4">Specs & Stack</Table.Column>
-                            <Table.Column className="border-b border-zinc-800 font-medium text-xs uppercase h-12 text-left px-4">Tier Metrics</Table.Column>
-                            <Table.Column className="border-b border-zinc-800 font-medium text-xs uppercase h-12 text-left px-4">Status Indicator</Table.Column>
-                            <Table.Column align="end" className="border-b border-zinc-800 font-medium text-xs uppercase h-12 text-right px-4">Administrative Actions Controls</Table.Column>
-                        </Table.Header>
+        <div className="w-full">
+            <div className="block lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+                {prompts.map((prompt) => (
+                    <div
+                        key={prompt._id}
+                        className="bg-sky-50 dark:bg-slate-900 border border-sky-200 dark:border-sky-900/40 rounded-xl p-4 shadow-md space-y-4 transition-colors hover:border-sky-400 dark:hover:border-sky-500 flex flex-col justify-between"
+                    >
+                        <div className="space-y-4">
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                    <Image
+                                        src={prompt.thumbnail || "/placeholder.png"}
+                                        alt=""
+                                        width={50}
+                                        height={50}
+                                        className="w-12 h-12 object-cover rounded-lg bg-sky-100 dark:bg-slate-800 border border-sky-200 dark:border-sky-800 shrink-0"
+                                    />
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="font-semibold text-sm text-slate-900 dark:text-slate-100 line-clamp-1">{prompt.title}</span>
+                                        <span className="text-[10px] tracking-wide text-sky-600 dark:text-sky-400 uppercase mt-0.5">{prompt.category}</span>
+                                    </div>
+                                </div>
 
-                        <Table.Body>
-                            {prompts.map((prompt) => (
-                                <Table.Row key={prompt._id} className="hover:bg-zinc-900/40 border-b border-zinc-900/50 transition-colors">
-                                    <Table.Cell className="py-4 px-4">
-                                        <div className="flex items-center gap-3">
-                                            <img
-                                                src={prompt.thumbnail || "/placeholder.png"}
-                                                alt=""
-                                                className="w-10 h-10 object-cover rounded-lg bg-zinc-900 border border-zinc-800 shrink-0"
-                                            />
-                                            <div className="flex flex-col min-w-0 max-w-44">
-                                                <span className="font-semibold text-sm truncate block text-zinc-200">{prompt.title}</span>
-                                                <span className="text-[10px] tracking-wide text-zinc-500 uppercase mt-0.5">{prompt.category}</span>
-                                            </div>
-                                        </div>
-                                    </Table.Cell>
+                                <span className={`text-[9px] px-2 py-0.5 rounded uppercase font-semibold border shrink-0 ${prompt.status === 'approved' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                    prompt.status === 'rejected' ? 'bg-danger/10 text-danger border-danger/20' :
+                                        'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                                    }`}>
+                                    {prompt.status || 'pending'}
+                                </span>
+                            </div>
 
-                                    <Table.Cell className="py-4 px-4">
-                                        <div className="flex flex-col text-xs space-y-0.5">
-                                            <span className="font-medium text-zinc-300 flex items-center gap-1">
-                                                {prompt.creatorName}
-                                            </span>
-                                            <span className="text-[10px] opacity-50 flex items-center gap-1 text-zinc-400">
-                                                <FiMail size={10} /> {prompt.creatorEmail}
-                                            </span>
-                                        </div>
-                                    </Table.Cell>
+                            <div className="grid grid-cols-2 gap-y-3 gap-x-2 border-t border-b border-sky-200 dark:border-sky-900/40 py-3 text-xs">
+                                <div>
+                                    <span className="text-slate-800 dark:text-slate-200 block text-[10px] uppercase mb-0.5">Creator</span>
+                                    <span className="font-medium text-zinc-300 block truncate">{prompt.creatorName}</span>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1 truncate mt-0.5">
+                                        <FiMail size={10} /> {prompt.creatorEmail}
+                                    </span>
+                                </div>
 
-                                    <Table.Cell className="py-4 px-4">
-                                        <div className="flex flex-wrap gap-1.5 max-w-36">
-                                            <span className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-[10px] text-zinc-300 font-medium capitalize">
-                                                {prompt.aiTool}
-                                            </span>
-                                            <span className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-[10px] text-zinc-400 capitalize">
-                                                {prompt.difficulty}
-                                            </span>
-                                        </div>
-                                    </Table.Cell>
-
-                                    <Table.Cell className="py-4 px-4">
-                                        <div className="flex flex-col text-[11px] text-zinc-400 space-y-0.5 font-medium">
-                                            <span className="capitalize flex items-center gap-1">
-                                                Visibility: <span className={prompt.visibility === "public" ? "text-blue-400" : "text-amber-500"}>{prompt.visibility}</span>
-                                            </span>
-                                            <span>Usage Actions Count: {prompt.copyCount || 0}</span>
-                                        </div>
-                                    </Table.Cell>
-
-                                    <Table.Cell className="py-4 px-4 text-sm">
-                                        <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-semibold border ${prompt.status === 'approved' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                                            prompt.status === 'rejected' ? 'bg-danger/10 text-danger border-danger/20' :
-                                                'bg-amber-500/10 text-amber-500 border-amber-500/20'
-                                            }`}>
-                                            {prompt.status || 'pending'}
+                                <div>
+                                    <span className="text-zinc-500 block text-[10px] uppercase mb-0.5">Specs & Stack</span>
+                                    <div className="flex flex-wrap gap-1">
+                                        <span className="border px-1.5 py-0.5 rounded text-[10px] capitalize bg-sky-100 dark:bg-sky-950/40 border-sky-200 dark:border-sky-800 text-sky-700 dark:text-sky-300">
+                                            {prompt.aiTool}
                                         </span>
-                                    </Table.Cell>
+                                        <span className="border px-1.5 py-0.5 rounded text-[10px] capitalize bg-cyan-100 dark:bg-cyan-950/40 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300">
+                                            {prompt.difficulty}
+                                        </span>
+                                    </div>
+                                </div>
 
-                                    <Table.Cell className="py-4 px-4">
-                                        <div className="flex items-center justify-end gap-1.5">
-                                            <Button
-                                                size="sm"
-                                                variant="light"
-                                                disabled={processingId !== null}
-                                                className={`min-w-8 w-8 h-8 p-0 hover:bg-zinc-800/80 rounded-lg ${prompt.isFeatured ? 'text-amber-400 bg-amber-500/5' : 'text-zinc-500'}`}
-                                                onClick={() => handleToggleFeature(prompt._id, prompt.isFeatured)}
-                                            >
-                                                <FiStar size={14} className={prompt.isFeatured ? "fill-amber-400" : ""} />
-                                            </Button>
+                                <div className="col-span-2 flex justify-between items-center p-2 rounded-lg border bg-sky-100/60 dark:bg-sky-950/20 border-sky-200 dark:border-sky-900/40">
+                                    <div className="text-[11px] text-slate-700 dark:text-slate-300 space-y-0.5 font-medium">
+                                        <span className="capitalize block">
+                                            Visibility: <span className={prompt.visibility === "public" ? "text-sky-600 dark:text-sky-400" : "text-orange-600 dark:text-orange-400"}>{prompt.visibility}</span>
+                                        </span>
+                                        <span className="block text-slate-500 dark:text-slate-400">Usage Count: {prompt.copyCount || 0}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                            {prompt.status !== 'approved' && (
+                        <div className="flex items-center justify-between pt-3 mt-auto">
+                            <span className="text-[10px] text-zinc-600 font-mono">ID: ...{prompt._id.slice(-6)}</span>
+                            <div className="flex items-center gap-1.5">
+                                <Button
+                                    size="sm"
+                                    variant="light"
+                                    disabled={processingId !== null}
+                                    className={`min-w-8 w-8 h-8 p-0 hover:bg-sky-100 dark:hover:bg-sky-950/40 rounded-lg ${prompt.isFeatured ? 'text-sky-600 dark:text-sky-400 bg-sky-100 dark:bg-sky-950/30' : 'text-slate-500 dark:text-slate-400'}`}
+                                    onClick={() => handleToggleFeature(prompt._id, prompt.isFeatured)}
+                                >
+                                    <FiStar size={14} className={prompt.isFeatured ? "fill-amber-400" : ""} />
+                                </Button>
+
+                                {prompt.status !== 'approved' && (
+                                    <Button
+                                        size="sm"
+                                        variant="light"
+                                        disabled={processingId !== null}
+                                        className="text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-950/30 min-w-8 w-8 h-8 p-0 rounded-lg"
+                                        onClick={() => handleApprove(prompt._id)}
+                                    >
+                                        <FiCheck size={14} />
+                                    </Button>
+                                )}
+
+                                {prompt.status !== 'rejected' && (
+                                    <Button
+                                        size="sm"
+                                        variant="light"
+                                        disabled={processingId !== null}
+                                        className="text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-950/30 min-w-8 w-8 h-8 p-0 rounded-lg"
+                                        onClick={() => openRejectSequence(prompt._id)}
+                                    >
+                                        <FiX size={14} />
+                                    </Button>
+                                )}
+
+                                <Button
+                                    size="sm"
+                                    variant="light"
+                                    disabled={processingId !== null}
+                                    isLoading={processingId === prompt._id}
+                                    className="text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/30 min-w-8 w-8 h-8 p-0 rounded-lg"
+                                    onClick={() => handleDelete(prompt._id)}
+                                >
+                                    <FiTrash2 size={14} />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="hidden lg:block shadow-2xl rounded-xl p-4 border border-sky-200 dark:border-sky-900/40 bg-white dark:bg-slate-950 overflow-x-auto w-full">
+                <Table>
+                    <Table.ScrollContainer>
+                        <Table.Content aria-label="System Administration Prompts Repository Dashboard Matrix">
+                            <Table.Header>
+                                <Table.Column isRowHeader width={240} className="border-b border-sky-200 dark:border-sky-900/40 font-medium text-xs uppercase h-12 text-left px-4 text-sky-700 dark:text-sky-400">Prompt Identity</Table.Column>
+                                <Table.Column className="border-b border-sky-200 dark:border-sky-900/40 font-medium text-xs uppercase h-12 text-left px-4 text-sky-700 dark:text-sky-400">Creator / Owner</Table.Column>
+                                <Table.Column className="border-b border-sky-200 dark:border-sky-900/40 font-medium text-xs uppercase h-12 text-left px-4 text-sky-700 dark:text-sky-400">Specs & Stack</Table.Column>
+                                <Table.Column className="border-b border-sky-200 dark:border-sky-900/40 font-medium text-xs uppercase h-12 text-left px-4 text-sky-700 dark:text-sky-400">Tier Metrics</Table.Column>
+                                <Table.Column className="border-b border-sky-200 dark:border-sky-900/40 font-medium text-xs uppercase h-12 text-left px-4 text-sky-700 dark:text-sky-400">Status Indicator</Table.Column>
+                                <Table.Column align="end" className="border-b border-sky-200 dark:border-sky-900/40 font-medium text-xs uppercase h-12 text-right px-4 text-sky-700 dark:text-sky-400">Administrative Actions Controls</Table.Column>
+                            </Table.Header>
+
+                            <Table.Body>
+                                {prompts.map((prompt) => (
+                                    <Table.Row key={prompt._id} className="border-b transition-colors hover:bg-sky-50 dark:hover:bg-sky-950/20 border-sky-100 dark:border-sky-900/20">
+                                        <Table.Cell className="py-4 px-4">
+                                            <div className="flex items-center gap-3">
+                                                <img
+                                                    src={prompt.thumbnail || "/placeholder.png"}
+                                                    alt=""
+                                                    className="w-10 h-10 object-cover rounded-lg bg-zinc-900 border border-zinc-800 shrink-0"
+                                                />
+                                                <div className="flex flex-col min-w-0 max-w-44">
+                                                    <span className="font-semibold text-sm truncate block text-zinc-200">{prompt.title}</span>
+                                                    <span className="text-[10px] tracking-wide text-zinc-500 uppercase mt-0.5">{prompt.category}</span>
+                                                </div>
+                                            </div>
+                                        </Table.Cell>
+
+                                        <Table.Cell className="py-4 px-4">
+                                            <div className="flex flex-col text-xs space-y-0.5">
+                                                <span className="font-medium text-zinc-300 flex items-center gap-1">
+                                                    {prompt.creatorName}
+                                                </span>
+                                                <span className="text-[10px] opacity-50 flex items-center gap-1 text-zinc-400">
+                                                    <FiMail size={10} /> {prompt.creatorEmail}
+                                                </span>
+                                            </div>
+                                        </Table.Cell>
+
+                                        <Table.Cell className="py-4 px-4">
+                                            <div className="flex flex-wrap gap-1.5 max-w-36">
+                                                <span className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-[10px] text-zinc-300 font-medium capitalize">
+                                                    {prompt.aiTool}
+                                                </span>
+                                                <span className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-[10px] text-zinc-400 capitalize">
+                                                    {prompt.difficulty}
+                                                </span>
+                                            </div>
+                                        </Table.Cell>
+
+                                        <Table.Cell className="py-4 px-4">
+                                            <div className="flex flex-col text-[11px] text-zinc-400 space-y-0.5 font-medium">
+                                                <span className="capitalize flex items-center gap-1">
+                                                    Visibility: <span className={prompt.visibility === "public" ? "text-blue-400" : "text-amber-500"}>{prompt.visibility}</span>
+                                                </span>
+                                                <span>Usage Actions Count: {prompt.copyCount || 0}</span>
+                                            </div>
+                                        </Table.Cell>
+
+                                        <Table.Cell className="py-4 px-4 text-sm">
+                                            <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-semibold border ${prompt.status === 'approved' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                                prompt.status === 'rejected' ? 'bg-danger/10 text-danger border-danger/20' :
+                                                    'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                                                }`}>
+                                                {prompt.status || 'pending'}
+                                            </span>
+                                        </Table.Cell>
+
+                                        <Table.Cell className="py-4 px-4">
+                                            <div className="flex items-center justify-end gap-1.5">
                                                 <Button
                                                     size="sm"
                                                     variant="light"
                                                     disabled={processingId !== null}
-                                                    className="text-green-500 hover:bg-green-950/20 min-w-8 w-8 h-8 p-0 rounded-lg"
-                                                    onClick={() => handleApprove(prompt._id)}
+                                                    className={`min-w-8 w-8 h-8 p-0 hover:bg-zinc-800/80 rounded-lg ${prompt.isFeatured ? 'text-amber-400 bg-amber-500/5' : 'text-zinc-500'}`}
+                                                    onClick={() => handleToggleFeature(prompt._id, prompt.isFeatured)}
                                                 >
-                                                    <FiCheck size={14} />
+                                                    <FiStar size={14} className={prompt.isFeatured ? "fill-amber-400" : ""} />
                                                 </Button>
-                                            )}
 
-                                            {prompt.status !== 'rejected' && (
+                                                {prompt.status !== 'approved' && (
+                                                    <Button
+                                                        size="sm"
+                                                        variant="light"
+                                                        disabled={processingId !== null}
+                                                        className="text-green-500 hover:bg-green-950/20 min-w-8 w-8 h-8 p-0 rounded-lg"
+                                                        onClick={() => handleApprove(prompt._id)}
+                                                    >
+                                                        <FiCheck size={14} />
+                                                    </Button>
+                                                )}
+
+                                                {prompt.status !== 'rejected' && (
+                                                    <Button
+                                                        size="sm"
+                                                        variant="light"
+                                                        disabled={processingId !== null}
+                                                        className="text-warning hover:bg-warning-950/20 min-w-8 w-8 h-8 p-0 rounded-lg"
+                                                        onClick={() => openRejectSequence(prompt._id)}
+                                                    >
+                                                        <FiX size={14} />
+                                                    </Button>
+                                                )}
+
                                                 <Button
                                                     size="sm"
                                                     variant="light"
                                                     disabled={processingId !== null}
-                                                    className="text-warning hover:bg-warning-950/20 min-w-8 w-8 h-8 p-0 rounded-lg"
-                                                    onClick={() => openRejectSequence(prompt._id)}
+                                                    isLoading={processingId === prompt._id}
+                                                    className="text-zinc-500 hover:text-danger hover:bg-danger-950/20 min-w-8 w-8 h-8 p-0 rounded-lg"
+                                                    onClick={() => handleDelete(prompt._id)}
                                                 >
-                                                    <FiX size={14} />
+                                                    <FiTrash2 size={14} />
                                                 </Button>
-                                            )}
-
-                                            <Button
-                                                size="sm"
-                                                variant="light"
-                                                disabled={processingId !== null}
-                                                isLoading={processingId === prompt._id}
-                                                className="text-zinc-500 hover:text-danger hover:bg-danger-950/20 min-w-8 w-8 h-8 p-0 rounded-lg"
-                                                onClick={() => handleDelete(prompt._id)}
-                                            >
-                                                <FiTrash2 size={14} />
-                                            </Button>
-                                        </div>
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                    </Table.Content>
-                </Table.ScrollContainer>
-            </Table>
+                                            </div>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table.Body>
+                        </Table.Content>
+                    </Table.ScrollContainer>
+                </Table>
+            </div>
 
             <Modal isOpen={isRejectModalOpen} onClose={() => setIsRejectModalOpen(false)}>
                 <Modal.Backdrop variant="blur">
                     <Modal.Container>
-                        <Modal.Dialog className="sm:max-w-[420px] bg-zinc-950 border border-zinc-900 rounded-xl">
+                        <Modal.Dialog className="sm:max-w-[420px] bg-white dark:bg-slate-950 border-sky-200 dark:border-sky-900/40 rounded-xl">
                             <Modal.CloseTrigger />
                             <Modal.Header>
                                 <Modal.Icon className="bg-warning/10 text-warning border border-warning/20">
@@ -250,13 +368,13 @@ export default function AdminPromptsTable({ initialPrompts }) {
                                 <Modal.Heading>Provide Rejection Feedback</Modal.Heading>
                             </Modal.Header>
                             <Modal.Body className="space-y-3">
-                                <p className="text-xs text-zinc-400 leading-relaxed">
+                                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                     State explicit design architecture modifications or policy context violations explaining why this configuration set failed processing verification standards.
                                 </p>
                                 <Input
                                     label="Rejection Comments Log"
-                                    placeholder="e.g., Structure lacks efficient PyTorch input requirements or input schema values..."
-                                    variant="bordered"
+                                    placeholder="e.g., Structure lacks efficient PyTorch input requirements..."
+                                    variant="outline"
                                     className="w-full text-sm"
                                     value={rejectionFeedback}
                                     onChange={(e) => setRejectionFeedback(e.target.value)}
@@ -264,7 +382,6 @@ export default function AdminPromptsTable({ initialPrompts }) {
                             </Modal.Body>
                             <Modal.Footer className="flex gap-2">
                                 <Button
-                                    variant="secondary"
                                     className="w-full text-xs font-semibold h-10"
                                     onClick={() => setIsRejectModalOpen(false)}
                                 >

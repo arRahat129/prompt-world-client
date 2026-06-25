@@ -13,6 +13,7 @@ import PromptDetailsSide from '@/components/promptDetails/PromptDetailsSide';
 import PromptReviewSection from '@/components/promptDetails/PromptReviewSection';
 import BookmarkButton from '@/components/BookmarkButton';
 import BackToPreviousPage from '@/components/BackToPreviousPage';
+import ReportButton from '@/components/ReportButton';
 
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
@@ -92,9 +93,7 @@ const PromptDetailsPage = async ({ params }) => {
 
                                 <BookmarkButton prompt={prompt} user={user} promptId={id} />
                                 
-                                <Button isIconOnly variant="outline" className="border-zinc-800 dark:border-zinc-200 rounded-xl">
-                                    <FiFlag size={16} />
-                                </Button>
+                                <ReportButton promptId={id} />
                             </div>
                         </div>
                         <p className="text-base leading-relaxed max-w-3xl">

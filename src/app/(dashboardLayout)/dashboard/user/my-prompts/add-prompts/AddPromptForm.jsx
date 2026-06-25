@@ -93,7 +93,7 @@ export default function AddPromptForm() {
 
         const payload = {
             ...data,
-            thumbnail: finalThumbnail,
+            thumbnail: finalThumbnail || 'https://ibb.co.com/zHXM6hrR',
             copyCount: 0,
             status:"pending",
             creatorId: user?.id,
