@@ -37,7 +37,7 @@ export async function POST(req) {
             ],
             mode: 'payment',
             metadata: { planId },
-            success_url: `${origin}/plans/success?session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${origin}/plans/success?session_id={CHECKOUT_SESSION_ID}&plan_id=${planId}`,
         });
         return NextResponse.redirect(session.url, 303)
     } catch (err) {

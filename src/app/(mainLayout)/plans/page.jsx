@@ -8,8 +8,27 @@ import React, { useEffect, useState } from 'react';
 import { FiCheck, FiUser, FiBriefcase, FiHelpCircle, FiChevronDown } from 'react-icons/fi';
 
 export default function PlansPage() {
-    const { data: session, isPending } = useSession()
+    const { data: session, isPending } = useSession();
     const router = useRouter();
+
+    const userRole = session?.user?.role;
+    console.log(userRole);
+    const currentPlanId = session?.user?.plan;
+    console.log(currentPlanId);
+
+    const [billingTarget, setBillingTarget] = useState(() => {
+        return session?.user?.role === 'creator' ? 'creator' : 'user';
+    });
+
+    const [prevUserRole, setPrevUserRole] = useState(userRole);
+
+    if (userRole !== prevUserRole) {
+        setPrevUserRole(userRole);
+        setBillingTarget(userRole === 'creator' ? 'creator' : 'user');
+    }
+
+    // Fixed: Removed TypeScript type definitions entirely
+    const [openFaq, setOpenFaq] = useState(null);
 
     useEffect(() => {
         if (!isPending && !session?.user?.id) {
@@ -17,14 +36,7 @@ export default function PlansPage() {
         }
     }, [session, isPending, router]);
 
-    const userRole = session?.user?.role;
-
-
-
-    const [billingTarget, setBillingTarget] = useState('user');
-
-    const [openFaq, setOpenFaq] = useState(null);
-
+    // Fixed: Removed explicit ": number" type signature
     const toggleFaq = (index) => {
         setOpenFaq(openFaq === index ? null : index);
     };
@@ -123,14 +135,13 @@ export default function PlansPage() {
         }
     ];
 
-    const activePlans = plansData[billingTarget];
+    const activePlans = plansData[billingTarget] || plansData.user;
 
     return (
         <div className="w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-            {/* Switched max-w from 6xl to 4xl to natively center and frame the 2-column card balance */}
             <div className="max-w-4xl mx-auto">
 
-                {/* Header Title Typography */}
+                {/* Header Title */}
                 <div className="text-center max-w-3xl mx-auto mb-12">
                     <span className="text-xs font-semibold uppercase tracking-widest text-primary">
                         Transparent Pricing
@@ -144,7 +155,7 @@ export default function PlansPage() {
                     </p>
                 </div>
 
-                {/* Switch Segment Control Toggle Grid Wrapper */}
+                {/* Switch Toggle */}
                 <div className="flex justify-center mb-16">
                     <div className="p-1.5 bg-content2 border border-divider rounded-xl flex items-center gap-1 shadow-inner">
                         <button
@@ -170,7 +181,7 @@ export default function PlansPage() {
                     </div>
                 </div>
 
-                {/* 2-Column Balanced Card Layout (Using reference utility styles) */}
+                {/* Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-24">
                     {activePlans.map((plan, idx) => (
                         <div
@@ -180,14 +191,12 @@ export default function PlansPage() {
                                 : 'border-divider hover:border-divider-horizontal'
                                 }`}
                         >
-                            {/* Popular Highlight Pill */}
                             {plan.isPopular && (
                                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-[10px] font-bold text-primary-foreground bg-primary rounded-full uppercase tracking-wider shadow-md">
                                     Most Popular
                                 </span>
                             )}
 
-                            {/* Plan Name & Core Header Metadata */}
                             <div>
                                 <div className="flex items-center justify-between gap-2 mb-3">
                                     <h3 className="text-xl font-bold">{plan.name}</h3>
@@ -199,7 +208,6 @@ export default function PlansPage() {
                                     {plan.description}
                                 </p>
 
-                                {/* Dynamic Price Indicator Text Block */}
                                 <div className="my-6 flex items-baseline gap-1">
                                     <span className="text-4xl font-black tracking-tight">{plan.price}</span>
                                     <span className="text-xs opacity-50 font-medium">{plan.period}</span>
@@ -207,7 +215,6 @@ export default function PlansPage() {
 
                                 <hr className="border-divider my-6" />
 
-                                {/* Interactive Checkbox Checklist Array Mapping */}
                                 <ul className="space-y-3">
                                     {plan.features.map((feature, fIdx) => (
                                         <li key={fIdx} className="flex items-start gap-2.5 text-xs">
@@ -220,7 +227,6 @@ export default function PlansPage() {
                                 </ul>
                             </div>
 
-                            {/* Plan Action CTA Callout */}
                             <div className="mt-8">
                                 {plan.price === "$0" ? (
                                     <button
@@ -232,36 +238,34 @@ export default function PlansPage() {
                                 ) : (
                                     <form action="/api/checkout_sessions" method="POST">
                                         <input type="hidden" name="plan_id" value={plan.id} />
-                                        {
-                                            userRole !== plan.for
-                                                ? <WrongRolePlanModal plan={plan} />
-                                                : (
-                                                    <button
-                                                        type="submit"
-                                                        // Block action if user profile already has an active paid premium tier matching this plan
-                                                        disabled={session?.user?.plan === plan.id}
-                                                        className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${session?.user?.plan === plan.id
-                                                                ? 'bg-emerald-900/30 text-emerald-400 border border-emerald-800/50 cursor-not-allowed'
-                                                                : plan.isPopular
-                                                                    ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
-                                                                    : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
-                                                            }`}
-                                                    >
-                                                        {session?.user?.plan === plan.id ? "Plan Already Activated" : "Upgrade Plan"}
-                                                    </button>
-                                                )
-                                        }
+                                        {userRole !== plan.for ? (
+                                            <WrongRolePlanModal plan={plan} />
+                                        ) : (
+                                            <button
+                                                type="submit"
+                                                disabled={session?.user?.plan === plan.id}
+                                                className={`block w-full text-center text-xs font-semibold px-4 py-3 rounded-xl transition duration-200 ${session?.user?.plan === plan.id
+                                                    ? 'bg-emerald-900/30 text-emerald-400 border border-emerald-800/50 cursor-not-allowed'
+                                                    : plan.isPopular
+                                                        ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'
+                                                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'
+                                                    }`}
+                                            >
+                                                {session?.user?.plan === plan.id ? "Plan Already Activated" : "Upgrade Plan"}
+                                            </button>
+                                        )}
                                     </form>
                                 )}
                             </div>
                         </div>
                     ))}
                 </div>
+
                 <div className='flex justify-end mt-[-5] mb-5'>
                     <BackToPreviousPage />
                 </div>
 
-                {/* FAQ Accordion Section Layout Wrapper */}
+                {/* FAQ Accordion */}
                 <div className="max-w-3xl mx-auto border-t border-divider pt-16">
                     <div className="text-center mb-10">
                         <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-content2 border border-divider text-foreground/60 mb-3">
@@ -290,7 +294,6 @@ export default function PlansPage() {
                                         />
                                     </button>
 
-                                    {/* Collapsible Accordion Element View Body */}
                                     <div
                                         className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-40 border-t border-divider/60' : 'max-h-0'
                                             }`}
