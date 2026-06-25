@@ -33,7 +33,7 @@ const SidebarLinks = ({ user }) => {
         { icon: Person, href: `/dashboard/${user?.role}/all-users`, label: "All Users" },
         { icon: Magnifier, href: `/dashboard/${user?.role}/all-prompts`, label: "All Prompts" },
         { icon: Gear, href: `/dashboard/${user?.role}/all-payments`, label: "All Payments" },
-        { icon: Bell, href: `/dashboard/${user?.role}/reported-prompts`, label: "Reported Prompts" },
+        { icon: Bell, href: `/dashboard/${user?.role}/reports`, label: "Reported Prompts" },
     ];
 
     const navLinksMap = {

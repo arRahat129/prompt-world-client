@@ -8,6 +8,7 @@ import {
 } from "@heroui/react";
 import { FiFlag } from "react-icons/fi";
 import { createReport } from "@/lib/actions/reports";
+import toast from "react-hot-toast";
 
 const ReportButton = ({ promptId }) => {
     const [reportType, setReportType] = useState("");
@@ -44,6 +45,7 @@ const ReportButton = ({ promptId }) => {
             });
 
             if (response?.success) {
+                toast.success('Reported Successfully!')
                 handleReset();
 
                 const nativeCloseButton = document.querySelector(
