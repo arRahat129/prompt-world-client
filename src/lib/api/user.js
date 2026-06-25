@@ -2,7 +2,8 @@
 
 import { serverFetch } from "../core/server";
 
-export const allUsers = async() => {
-    const result = await serverFetch('/api/user');
+export const allUsers = async (queryString = "") => {
+    const path = queryString ? `/api/user?${queryString}` : '/api/user';
+    const result = await serverFetch(path);
     return result;
 }

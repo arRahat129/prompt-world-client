@@ -3,6 +3,7 @@ import { Card } from "@heroui/react";
 import PromptCard from '@/components/prompts/PromptCard';
 import FilterPanel from '@/components/prompts/FilterPanel';
 import { filterPrompts } from '@/lib/api/prompts';
+import PromptListingContainer from "@/components/prompts/PromptListingContainer";
 
 const AllPromptsPage = async ({ searchParams }) => {
     const sParams = await searchParams;
@@ -11,8 +12,11 @@ const AllPromptsPage = async ({ searchParams }) => {
     const category = sParams.category || "";
     const aiTool = sParams.aiTool || "";
     const difficulty = sParams.difficulty || "";
+    const page = parseInt(sParams.page) || 1;
 
     const params = new URLSearchParams();
+    params.set("page", page.toString());
+    params.set("perPage", "12");
 
     params.set("status", "approved");
 
@@ -29,8 +33,14 @@ const AllPromptsPage = async ({ searchParams }) => {
         params.set("difficulty", difficulty);
     }
 
-    const prompts = await filterPrompts(params);
+    const responseData = await filterPrompts(params) || { total: 0, prompts: [] };
+
+    const prompts = responseData?.prompts ?? (Array.isArray(responseData) ? responseData : []);
     console.log(prompts);
+
+    const total = responseData.total || prompts.length || 0;
+
+    const filters = { search, category, aiTool, difficulty, page };
 
     return (
         <div className="w-full min-h-screen py-8 px-4 max-w-7xl mx-auto space-y-8">
@@ -49,32 +59,11 @@ const AllPromptsPage = async ({ searchParams }) => {
                 <FilterPanel />
             </Suspense>
 
-            <Suspense fallback={
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {Array(8).fill(0).map((_, i) => (
-                        <Card key={i} className="border border-zinc-200 dark:border-zinc-800 p-4 space-y-4 animate-pulse bg-transparent">
-                            <div className="h-40 rounded-lg bg-zinc-100 dark:bg-zinc-900" />
-                            <div className="space-y-2">
-                                <div className="h-4 bg-zinc-100 dark:bg-zinc-900 w-3/5 rounded" />
-                                <div className="h-3 bg-zinc-100 dark:bg-zinc-900 w-4/5 rounded" />
-                            </div>
-                        </Card>
-                    ))}
-                </div>
-            }></Suspense>
-
-            {/* Grid display layout handling */}
-            {!prompts || prompts.length === 0 ? (
-                <div className="text-center py-16 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
-                    <p className="text-sm text-zinc-400 dark:text-zinc-500">No active prompts discovered in directory repository.</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {prompts.map((prompt) => (
-                        <PromptCard key={prompt._id} prompt={prompt} />
-                    ))}
-                </div>
-            )}
+            <PromptListingContainer
+                prompts={prompts}
+                total={total}
+                filters={filters}
+            />
         </div>
     );
 };
