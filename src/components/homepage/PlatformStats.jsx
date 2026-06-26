@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Spinner } from "@heroui/react";
 import { FiCpu, FiUsers, FiSliders, FiCheckCircle } from "react-icons/fi";
 import { getPlatformStats } from '@/lib/api/prompts';
+import { motion } from 'framer-motion';
 
 const PlatformStats = () => {
     const [statsData, setStatsData] = useState(null);
@@ -69,6 +70,31 @@ const PlatformStats = () => {
         }
     ];
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.08 // Elegant, tight ripple cadence
+            }
+        }
+    };
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 30, scale: 0.95 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 16,
+                mass: 0.8
+            }
+        }
+    };
+
     return (
         <section className="w-full max-w-7xl mx-auto px-4 py-16">
             <div className="text-center mb-12 space-y-3">
@@ -83,33 +109,46 @@ const PlatformStats = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
                 {dynamicStats.map((item) => {
                     const Icon = item.icon;
                     return (
-                        <Card
+                        <motion.div
                             key={item.id}
-                            className="p-6 bg-linear-to-b from-zinc-50 to-zinc-100/50 dark:from-[#0f172a] dark:to-[#0f172a]/40 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between transition-colors duration-200 hover:border-zinc-300 dark:hover:border-zinc-700"
-                            shadow="none"
+                            variants={cardVariants}
+                            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                            className="flex h-full w-full"
                         >
-                            <div>
-                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-5 ${item.color}`}>
-                                    <Icon size={20} />
+                            <Card
+                                key={item.id}
+                                className="p-6 bg-linear-to-b from-zinc-50 to-zinc-100/50 dark:from-[#0f172a] dark:to-[#0f172a]/40 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between transition-colors duration-200 hover:border-zinc-300 dark:hover:border-zinc-700"
+                                shadow="none"
+                            >
+                                <div>
+                                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-5 ${item.color}`}>
+                                        <Icon size={20} />
+                                    </div>
+                                    <h3 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight font-mono">
+                                        {item.metric}
+                                    </h3>
+                                    <h4 className="font-bold text-sm text-zinc-800 dark:text-zinc-200 mt-1">
+                                        {item.title}
+                                    </h4>
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">
+                                        {item.description}
+                                    </p>
                                 </div>
-                                <h3 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight font-mono">
-                                    {item.metric}
-                                </h3>
-                                <h4 className="font-bold text-sm text-zinc-800 dark:text-zinc-200 mt-1">
-                                    {item.title}
-                                </h4>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">
-                                    {item.description}
-                                </p>
-                            </div>
-                        </Card>
+                            </Card>
+                        </motion.div>
                     );
                 })}
-            </div>
+            </motion.div>
         </section>
     );
 };

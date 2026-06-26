@@ -101,7 +101,7 @@ const PromptDetailsPage = async ({ params }) => {
                         </p>
                     </div>
 
-                    <PromptContentArea prompt={prompt} isLocked={isLocked} user={user} isOwner={isOwner} />
+                    <PromptContentArea prompt={prompt} isLocked={isLocked} user={user} isOwner={isOwner} redirectTo={`?redirect=/prompts/${id}`} />
                 </div>
 
                 {/* RIGHT SIDEBAR METRICS COLUMN (1/3 width) */}

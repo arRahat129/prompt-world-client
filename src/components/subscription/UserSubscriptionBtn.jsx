@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from "@heroui/react";
 import { useRouter } from 'next/navigation';
 
-const UserSubscriptionBtn = ({ price }) => {
+const UserSubscriptionBtn = ({ price, redirectTo }) => {
     const router = useRouter();
     
     const handleSubscription = () => {

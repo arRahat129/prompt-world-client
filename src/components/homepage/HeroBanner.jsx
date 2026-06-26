@@ -6,6 +6,7 @@ import heroPng from "@/images/hero.jpg";
 import { Button } from "@heroui/react";
 import { Search, Sparkles, ArrowRight, Zap, Flame } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function HeroBanner() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -23,9 +24,29 @@ export default function HeroBanner() {
         console.log("Searching for:", searchQuery);
     };
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.12,
+                delayChildren: 0.1,
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 25 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5, ease: "easeOut" }
+        }
+    };
+
     return (
         <section className="relative w-full overflow-hidden py-20 md:py-32 lg:py-40 border-b border-blue-100/50 dark:border-blue-900/30">
-            
+
             {/* FULL-BLEED BACKGROUND IMAGE CONTAINER */}
             <div className="absolute inset-0 -z-30 h-full w-full">
                 <Image
@@ -50,30 +71,35 @@ export default function HeroBanner() {
             {/* CONTAINER CONTENT */}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Centered layout approach highlights the background art seamlessly */}
-                <div className="mx-auto max-w-4xl text-center space-y-8">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="mx-auto max-w-4xl text-center space-y-8"
+                >
 
                     {/* Pill Badge */}
-                    <div className="inline-flex items-center gap-2 rounded-full border border-blue-100/80 dark:border-blue-900/40 bg-white/80 dark:bg-blue-950/40 backdrop-blur-md px-3 py-1.5 text-xs font-medium text-blue-700 dark:text-blue-400 shadow-xs">
+                    <motion.div variants={itemVariants} className="inline-flex items-center gap-2 rounded-full border border-blue-100/80 dark:border-blue-900/40 bg-white/80 dark:bg-blue-950/40 backdrop-blur-md px-3 py-1.5 text-xs font-medium text-blue-700 dark:text-blue-400 shadow-xs">
                         <Sparkles className="h-3.5 w-3.5 text-blue-500 animate-pulse" />
                         <span>Supercharge Your AI Productivity Flow</span>
-                    </div>
+                    </motion.div>
 
                     {/* Heading Text Blocks */}
                     <div className="space-y-4">
-                        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.15]">
+                        <motion.h1 variants={itemVariants} className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.15]">
                             Engineered{" "}
                             <span className="bg-linear-to-r from-blue-600 via-indigo-500 to-blue-400 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-300">
                                 AI Prompts
                             </span>{" "}
                             For Peak Automation
-                        </h1>
-                        <p className="mx-auto max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                        </motion.h1>
+                        <motion.p variants={itemVariants} className="mx-auto max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                             Stop typing blind instructions. Discover, unlock, and deploy copy-pasteable framework templates engineered for elite creativity and code generation.
-                        </p>
+                        </motion.p>
                     </div>
 
                     {/* SEARCH INPUT CONSOLE */}
-                    <form onSubmit={handleSearchSubmit} className="mx-auto max-w-2xl pt-2">
+                    <motion.form variants={itemVariants} onSubmit={handleSearchSubmit} className="mx-auto max-w-2xl pt-2">
                         <div className="relative flex items-center p-1.5 rounded-2xl border border-blue-100 dark:border-blue-900/60 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-xl shadow-blue-100/20 dark:shadow-none focus-within:border-blue-500 dark:focus-within:border-blue-500 transition duration-200">
                             <div className="flex items-center pl-3 pointer-events-none text-slate-400 dark:text-slate-500">
                                 <Search className="h-5 w-5" />
@@ -92,10 +118,10 @@ export default function HeroBanner() {
                                 Search
                             </Button>
                         </div>
-                    </form>
+                    </motion.form>
 
                     {/* TRENDING PROMPT METADATA TAGS */}
-                    <div className="flex flex-wrap items-center justify-center gap-2.5 text-xs pt-1">
+                    <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-2.5 text-xs pt-1">
                         <div className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300 mr-1">
                             <Flame className="h-3.5 w-3.5 text-orange-500" />
                             <span>Trending:</span>
@@ -109,10 +135,10 @@ export default function HeroBanner() {
                                 {tag.label}
                             </Link>
                         ))}
-                    </div>
+                    </motion.div>
 
                     {/* CENTRAL CALL-TO-ACTION BUTTONS */}
-                    <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <motion.div variants={itemVariants} className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Button
                             as={Link}
                             href="/prompts"
@@ -133,9 +159,9 @@ export default function HeroBanner() {
                         >
                             Sell Your Prompts
                         </Button>
-                    </div>
+                    </motion.div>
 
-                </div>
+                </motion.div>
             </div>
         </section>
     );

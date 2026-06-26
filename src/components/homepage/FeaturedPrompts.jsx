@@ -4,6 +4,7 @@ import { FiArrowRight, FiSliders } from 'react-icons/fi';
 import PromptCard from '../prompts/PromptCard';
 import Link from 'next/link';
 import { Button } from '@heroui/react';
+import FeaturedGridClient from './FeaturedGridClient';
 
 const FeaturedPrompts = async () => {
     const response = await getFeaturedPrompts();
@@ -26,14 +27,15 @@ const FeaturedPrompts = async () => {
             </div>
 
             {featuredList.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {featuredList.map((prompt) => (
-                        <PromptCard
-                            key={prompt._id}
-                            prompt={{ ...prompt, _id: prompt.promptId }}
-                        />
-                    ))}
-                </div>
+                // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                //     {featuredList.map((prompt) => (
+                //         <PromptCard
+                //             key={prompt._id}
+                //             prompt={{ ...prompt, _id: prompt.promptId }}
+                //         />
+                //     ))}
+                // </div>
+                <FeaturedGridClient featuredList={featuredList} />
             ) : (
                 <div className="w-full border border-dashed border-sky-200 dark:border-sky-950/60 rounded-2xl bg-linear-to-b from-sky-50/40 to-transparent dark:from-sky-950/10 dark:to-transparent py-16 px-4 flex flex-col items-center justify-center text-center">
                     <div className="h-14 w-14 rounded-full bg-sky-100 dark:bg-sky-950 flex items-center justify-center text-sky-500 mb-4 shadow-sm border border-sky-200/40 dark:border-sky-900/40">

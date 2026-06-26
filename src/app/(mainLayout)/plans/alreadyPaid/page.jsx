@@ -31,6 +31,7 @@ export default async function AlreadyPaidPage() {
                     <p className="mt-3 text-xs leading-relaxed opacity-60 max-w-sm">
                         You were redirected here because your account is already locked into our permanent premium tier. No further checkouts or charges are required.
                     </p>
+                    <p className="mt-3 text-xs leading-relaxed opacity-60 max-w-sm border p-2 rounded-md">If you are having trouble or still showing you are using free plan, Then try to re-login</p>
 
                     <div className="w-full my-6 p-4 bg-content2/50 border border-divider rounded-xl text-left space-y-3">
                         <div className="flex items-start gap-2 text-xs">

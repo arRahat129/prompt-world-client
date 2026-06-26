@@ -3,7 +3,7 @@ import UserSubscriptionBtn from '../subscription/UserSubscriptionBtn';
 import CopyButton from '../CopyButton';
 import { getUserSession } from '@/lib/core/session';
 
-const PromptContentArea = async ({prompt, isLocked, user, isOwner}) => {
+const PromptContentArea = async ({prompt, isLocked, user, isOwner, redirectTo}) => {
     console.log(prompt);
 
     const isProUser = user?.plan?.toLowerCase() === 'user_pro';
@@ -47,7 +47,7 @@ const PromptContentArea = async ({prompt, isLocked, user, isOwner}) => {
                                         Unlock access to see this prompt, review options, and duplicate copies for a one-time upgrade.
                                     </p>
                                 </div>
-                                <UserSubscriptionBtn price={5} />
+                                <UserSubscriptionBtn price={5} redirectTo={redirectTo} />
                             </div>
                         )
                     }

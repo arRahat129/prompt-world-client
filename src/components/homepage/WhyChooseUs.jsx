@@ -12,6 +12,7 @@ import {
     FiArrowRight
 } from "react-icons/fi";
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 const WhyChooseUs = () => {
     const benefits = [
@@ -47,13 +48,43 @@ const WhyChooseUs = () => {
         }
     ];
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.06,
+            }
+        }
+    };
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 25 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: "spring",
+                stiffness: 110,
+                damping: 15,
+                mass: 0.9
+            }
+        }
+    };
+
     return (
         <section className="w-full relative overflow-hidden bg-zinc-50/50 dark:bg-[#090d16] py-20 px-4 transition-colors duration-300">
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-sky-400/10 dark:bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
 
             <div className="w-full max-w-7xl mx-auto relative z-10">
-                <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="text-center max-w-3xl mx-auto mb-16 space-y-4"
+                >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-sky-200/50 dark:border-sky-900/40 bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 font-semibold text-xs uppercase tracking-wider">
                         <span className="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse" />
                         Platform Advantages
@@ -66,9 +97,15 @@ const WhyChooseUs = () => {
                     <p className="text-zinc-500 dark:text-zinc-400 text-base md:text-lg">
                         The ultimate decentralized hub engineered to discover, optimize, and distribute professional generative AI instructions.
                     </p>
-                </div>
+                </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-80px" }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
                     {benefits.map((benefit, index) => (
                         <Card
                             key={index}
@@ -89,9 +126,15 @@ const WhyChooseUs = () => {
                             </div>
                         </Card>
                     ))}
-                </div>
+                </motion.div>
 
-                <div className="mt-16 text-center flex flex-col sm:flex-row items-center justify-center gap-4">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                    className="mt-16 text-center flex flex-col sm:flex-row items-center justify-center gap-4"
+                >
                     <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
                         Ready to scale your generative model output quality?
                     </p>
@@ -103,7 +146,7 @@ const WhyChooseUs = () => {
                             Explore Open Marketplace
                         </Button>
                     </Link>
-                </div>
+                </motion.div>
             </div>
         </section>
     );
