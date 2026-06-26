@@ -3,13 +3,17 @@
 import BackToPreviousPage from '@/components/BackToPreviousPage';
 import WrongRolePlanModal from '@/components/modals/WrongRolePlanModal';
 import { useSession } from '@/lib/auth-client';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FiCheck, FiUser, FiBriefcase, FiHelpCircle, FiChevronDown } from 'react-icons/fi';
 
 export default function PlansPage() {
     const { data: session, isPending } = useSession();
     const router = useRouter();
+
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get('redirect');
+    console.log(redirectTo);
 
     const userRole = session?.user?.role;
     console.log(userRole);
@@ -238,6 +242,7 @@ export default function PlansPage() {
                                 ) : (
                                     <form action="/api/checkout_sessions" method="POST">
                                         <input type="hidden" name="plan_id" value={plan.id} />
+                                        <input type="hidden" name="redirectTo" value={redirectTo || ''} />
                                         {userRole !== plan.for ? (
                                             <WrongRolePlanModal plan={plan} />
                                         ) : (

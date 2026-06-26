@@ -10,6 +10,8 @@ export async function POST(req) {
 
         const formData = await req.formData();
         const planId = formData.get('plan_id');
+        const redirectTo = formData.get('redirectTo');
+        // console.log(redirectTo);
         const priceId = PLAN_PRICE_ID[planId];
 
         if (!priceId) {
@@ -37,7 +39,7 @@ export async function POST(req) {
             ],
             mode: 'payment',
             metadata: { planId },
-            success_url: `${origin}/plans/success?session_id={CHECKOUT_SESSION_ID}&plan_id=${planId}`,
+            success_url: `${origin}/plans/success?session_id={CHECKOUT_SESSION_ID}&plan_id=${planId}&redirect=${redirectTo || ''}`,
         });
         return NextResponse.redirect(session.url, 303)
     } catch (err) {

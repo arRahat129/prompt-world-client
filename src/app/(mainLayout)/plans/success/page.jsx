@@ -14,6 +14,7 @@ export default function SuccessVerificationContent() {
 
     const targetPlanId = searchParams.get('plan_id');
     const sessionId = searchParams.get('session_id');
+    const redirectPath = searchParams.get('redirect');
     const hasValidParams = Boolean(targetPlanId && sessionId);
 
     // 💡 Initialize state conditionally based on parameters right away!
@@ -60,14 +61,14 @@ export default function SuccessVerificationContent() {
         if (!verificationSuccess) return;
 
         if (user && user.role) {
-            const targetRedirect = `/dashboard/${user.role}` || '/';
+            const targetRedirect = redirectPath || `/dashboard/${user.role}` || '/';
             const timer = setTimeout(() => {
                 router.push(targetRedirect);
             }, 2000);
 
             return () => clearTimeout(timer);
         }
-    }, [verificationSuccess, user, router]);
+    }, [verificationSuccess, user, router, redirectPath]);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6">
