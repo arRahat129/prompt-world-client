@@ -1,10 +1,11 @@
+'use client'
 import React from 'react';
 import UserSubscriptionBtn from '../subscription/UserSubscriptionBtn';
 import CopyButton from '../CopyButton';
-import { getUserSession } from '@/lib/core/session';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const PromptContentArea = async ({prompt, isLocked, user, isOwner, redirectTo}) => {
-    console.log(prompt);
+const PromptContentArea = ({ prompt, isLocked, user, isOwner, redirectTo }) => {
+    // console.log(prompt);
 
     const isProUser = user?.plan?.toLowerCase() === 'user_pro';
     const isCreatorPro = user?.plan?.toLowerCase() === 'creator_pro';
@@ -12,7 +13,7 @@ const PromptContentArea = async ({prompt, isLocked, user, isOwner, redirectTo}) 
     const isViewLocked = isLocked && !isCreatorPro;
 
     const isCopyLocked = prompt.visibility?.toLowerCase() !== 'public' && !isOwner && !isProUser;
-    
+
     return (
         <>
             <div className="space-y-3">
@@ -36,21 +37,42 @@ const PromptContentArea = async ({prompt, isLocked, user, isOwner, redirectTo}) 
                         }
                     </div>
 
-                    {
-                        isViewLocked && (
-                            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6 space-y-4 z-10">
-                                <div className="space-y-1 max-w-md">
-                                    <h3 className="text-xl font-bold text-white tracking-tight">
-                                        Premium Prompt Content Locked
-                                    </h3>
-                                    <p className="text-xs text-zinc-300 leading-normal">
-                                        Unlock access to see this prompt, review options, and duplicate copies for a one-time upgrade.
-                                    </p>
-                                </div>
-                                <UserSubscriptionBtn price={5} redirectTo={redirectTo} />
-                            </div>
-                        )
-                    }
+                    <AnimatePresence>
+                        {
+                            isViewLocked && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="absolute inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6 space-y-4 z-10"
+                                >
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        transition={{ delay: 0.05, duration: 0.3, ease: "easeOut" }}
+                                        className="space-y-1 max-w-md"
+                                    >
+                                        <h3 className="text-xl font-bold text-white tracking-tight">
+                                            Premium Prompt Content Locked
+                                        </h3>
+                                        <p className="text-xs text-zinc-300 leading-normal">
+                                            Unlock access to see this prompt, review options, and duplicate copies for a one-time upgrade.
+                                        </p>
+                                    </motion.div>
+
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: 0.15, duration: 0.25 }}
+                                    >
+                                        <UserSubscriptionBtn price={5} redirectTo={redirectTo} />
+                                    </motion.div>
+                                </motion.div>
+                            )
+                        }
+                    </AnimatePresence>
                 </div>
             </div>
 
