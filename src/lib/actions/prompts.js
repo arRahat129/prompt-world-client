@@ -6,6 +6,10 @@ export const createPrompt = async (newPromptData) => {
     return serverMutation('/api/prompts', newPromptData, "POST");
 }
 
+export const updatePrompt = async (promptId, updatedPromptData) => {
+    return serverMutation(`/api/prompts/${promptId}`, updatedPromptData, "PATCH");
+};
+
 export const approvePrompt = async (promptId) => {
     return serverMutation(`/api/prompts/${promptId}/approve`, {}, "PATCH");
 };

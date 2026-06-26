@@ -93,7 +93,7 @@ export default function PromptsTable({ initialPrompts, user }) {
             </Table.Cell>
             <Table.Cell className="py-4 px-4 text-sm">
                 <div className="flex justify-end">
-                    <ActionButtons prompt={prompt} isDeleting={isDeleting} handleDelete={handleDelete} user={user} />
+                    <ActionButtons prompt={prompt} isDeleting={isDeleting} handleDelete={handleDelete} />
                 </div>
             </Table.Cell>
         </Table.Row>

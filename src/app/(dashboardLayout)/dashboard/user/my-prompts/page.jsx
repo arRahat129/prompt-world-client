@@ -18,7 +18,7 @@ const MyPrompts = async () => {
                     </p>
                 </div>
 
-                <PromptsTable initialPrompts={prompts} />
+                <PromptsTable initialPrompts={prompts} user={user} />
             </div>
         </div>
     );
