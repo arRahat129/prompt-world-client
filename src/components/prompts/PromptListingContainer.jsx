@@ -21,6 +21,9 @@ export default function PromptListingContainer({ prompts = [], total = 0, filter
         if (filters.category) sp.set("category", filters.category);
         if (filters.aiTool) sp.set("aiTool", filters.aiTool);
         if (filters.difficulty) sp.set("difficulty", filters.difficulty);
+        if (filters.sortBy) sp.set("sortBy", filters.sortBy);
+        if (filters.order) sp.set("order", filters.order);
+
         sp.set("page", newPageNumber.toString());
 
         router.push(`?${sp.toString()}`, { scroll: true });
@@ -96,8 +99,8 @@ export default function PromptListingContainer({ prompts = [], total = 0, filter
                                         isActive={p === page}
                                         onPress={() => handlePageChange(p)}
                                         className={`h-8 w-8 text-xs font-mono font-bold rounded-lg flex items-center justify-center transition-all ${p === page
-                                                ? "bg-emerald-600 text-white shadow-xs"
-                                                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200/50 dark:hover:bg-zinc-800"
+                                            ? "bg-emerald-600 text-white shadow-xs"
+                                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200/50 dark:hover:bg-zinc-800"
                                             }`}
                                     >
                                         {p}

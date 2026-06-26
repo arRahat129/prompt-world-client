@@ -14,6 +14,9 @@ const AllPromptsPage = async ({ searchParams }) => {
     const difficulty = sParams.difficulty || "";
     const page = parseInt(sParams.page) || 1;
 
+    const sortBy = sParams.sortBy || "";
+    const order = sParams.order || "";
+
     const params = new URLSearchParams();
     params.set("page", page.toString());
     params.set("perPage", "12");
@@ -32,6 +35,12 @@ const AllPromptsPage = async ({ searchParams }) => {
     if (difficulty) {
         params.set("difficulty", difficulty);
     }
+    if (sortBy) {
+        params.set("sortBy", sortBy);
+    }
+    if (order) {
+        params.set("order", order);
+    }
 
     const responseData = await filterPrompts(params) || { total: 0, prompts: [] };
 
@@ -40,7 +49,7 @@ const AllPromptsPage = async ({ searchParams }) => {
 
     const total = responseData.total || prompts.length || 0;
 
-    const filters = { search, category, aiTool, difficulty, page };
+    const filters = { search, category, aiTool, difficulty, page, sortBy, order };
 
     return (
         <div className="w-full min-h-screen py-8 px-4 max-w-7xl mx-auto space-y-8">

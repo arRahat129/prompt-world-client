@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Form, TextField, Label, Input, Select, ListBox, Button } from "@heroui/react";
-import { FiSearch, FiSliders, FiRefreshCw, FiLayers, FiCpu, FiAward } from "react-icons/fi";
+import { FiSearch, FiSliders, FiRefreshCw, FiLayers, FiCpu, FiAward, FiBarChart2 } from "react-icons/fi";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function FilterPanel() {
@@ -14,6 +14,10 @@ export default function FilterPanel() {
     const [category, setCategory] = useState(searchParams.get("category") || "");
     const [aiTool, setAiTool] = useState(searchParams.get("aiTool") || "");
     const [difficulty, setDifficulty] = useState(searchParams.get("difficulty") || "");
+
+    const activeSortBy = searchParams.get("sortBy") || "createdAt";
+    const activeOrder = searchParams.get("order") || "desc";
+    const [sortRule, setSortRule] = useState(`${activeSortBy}-${activeOrder}`);
 
     const handleApplyFilters = (e) => {
         if (e) {
@@ -33,6 +37,11 @@ export default function FilterPanel() {
         if (difficulty) {
             params.set("difficulty", difficulty);
         }
+        if (sortRule) {
+            const [sortBy, order] = sortRule.split("-");
+            params.set("sortBy", sortBy);
+            params.set("order", order);
+        }
 
         router.push(`/prompts?${params.toString()}`);
     };
@@ -42,6 +51,7 @@ export default function FilterPanel() {
         setCategory("");
         setAiTool("");
         setDifficulty("");
+        setSortRule("createdAt-desc");
         router.push("/prompts");
     };
 
@@ -54,7 +64,7 @@ export default function FilterPanel() {
 
     return (
         <Form onSubmit={handleApplyFilters} className="w-full border border-zinc-200 dark:border-zinc-900 rounded-xl p-6 bg-white dark:bg-zinc-950/20 shadow-sm space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end w-full">
 
                 {/* Search Text Field */}
                 <TextField className="flex flex-col gap-1 w-full">
@@ -145,6 +155,30 @@ export default function FilterPanel() {
                             <ListBox.Item id="beginner" className={listItemClasses} textValue="Beginner">Beginner</ListBox.Item>
                             <ListBox.Item id="intermediate" className={listItemClasses} textValue="Intermediate">Intermediate</ListBox.Item>
                             <ListBox.Item id="pro" className={listItemClasses} textValue="Pro">Pro</ListBox.Item>
+                        </ListBox>
+                    </Select.Popover>
+                </Select>
+
+                {/* Sorting Dropdown Matrix Column */}
+                <Select
+                    className={selectBoxClass}
+                    selectedKey={sortRule}
+                    onSelectionChange={(key) => setSortRule(key)}
+                    placeholder="Sort Sequence"
+                >
+                    <Label className="text-zinc-700 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                        <FiBarChart2 className="rotate-90" size={12} /> Order By
+                    </Label>
+                    <Select.Trigger className={triggerClasses}>
+                        <Select.Value />
+                        <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Popover className={popoverClasses}>
+                        <ListBox className="outline-none">
+                            <ListBox.Item id="createdAt-desc" className={listItemClasses} textValue="Newest Matrix">Newest First</ListBox.Item>
+                            <ListBox.Item id="createdAt-asc" className={listItemClasses} textValue="Oldest Matrix">Oldest First</ListBox.Item>
+                            <ListBox.Item id="title-asc" className={listItemClasses} textValue="Alphabetical A-Z">Alphabetical (A-Z)</ListBox.Item>
+                            <ListBox.Item id="title-desc" className={listItemClasses} textValue="Alphabetical Z-A">Alphabetical (Z-A)</ListBox.Item>
                         </ListBox>
                     </Select.Popover>
                 </Select>
