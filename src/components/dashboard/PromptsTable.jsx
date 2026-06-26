@@ -7,6 +7,7 @@ import { FiEdit2, FiTrash2, FiCopy, FiInbox, FiPlus, FiEye, FiCpu } from "react-
 import toast from "react-hot-toast";
 import RenderCardGrid from "./promptsTableComponent/RenderCardGrid";
 import ActionButtons from "./promptsTableComponent/ActionButtons";
+import { deletePromptCreator } from "@/lib/actions/prompts";
 
 export default function PromptsTable({ initialPrompts, user }) {
     const [prompts, setPrompts] = useState(initialPrompts || "");
@@ -17,10 +18,17 @@ export default function PromptsTable({ initialPrompts, user }) {
 
         setIsDeleting(id);
         try {
-            setPrompts(prompts.filter(p => p._id !== id));
-            toast.success("Prompt layout purged successfully.");
+            const response = await deletePromptCreator(id);
+            
+            if (response?.success) {
+                setPrompts(prevPrompts => prevPrompts.filter(p => p._id !== id));
+                toast.success("Prompt configuration permanently purged.");
+            } else {
+                toast.error(response?.message || "Failed to remove the prompt template.");
+            }
         } catch (error) {
-            console.error(error);
+            console.error("Error executing prompt layout removal:", error);
+            toast.error("An unexpected server communication error occurred.");
         } finally {
             setIsDeleting(null);
         }

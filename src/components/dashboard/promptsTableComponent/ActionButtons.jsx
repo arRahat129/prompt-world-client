@@ -32,6 +32,7 @@ const ActionButtons = ({ prompt, isDeleting, handleDelete }) => {
                     <FiEye size={14} />
                 </Button>
             </Link>
+
             {isOwner ? (
                 <Button
                     size="sm"
@@ -51,15 +52,27 @@ const ActionButtons = ({ prompt, isDeleting, handleDelete }) => {
                     <FiEdit2 size={14} />
                 </Button>
             )}
-            <Button
-                size="sm"
-                variant="light"
-                isLoading={isDeleting === prompt._id}
-                className="text-zinc-400 hover:text-danger hover:bg-danger-950/20 min-w-8 w-8 h-8 p-0"
-                onClick={() => handleDelete(prompt._id)}
-            >
-                <FiTrash2 size={14} />
-            </Button>
+
+            {isOwner ? (
+                <Button
+                    size="sm"
+                    variant="light"
+                    isLoading={isDeleting === prompt._id}
+                    className="text-zinc-400 hover:text-danger hover:bg-danger-950/20 min-w-8 w-8 h-8 p-0"
+                    onClick={() => handleDelete(prompt._id)}
+                >
+                    <FiTrash2 size={14} />
+                </Button>
+            ) : (
+                <Button
+                    size="sm"
+                    variant="light"
+                    isDisabled
+                    className="text-zinc-300 dark:text-zinc-700 cursor-not-allowed min-w-8 w-8 h-8 p-0"
+                >
+                    <FiTrash2 size={14} />
+                </Button>
+            )}
 
             {isEditOpen && (
                 <EditPromptModal
