@@ -17,7 +17,7 @@ const containerVariants = {
 };
 
 export default function FeaturedGridClient({ featuredList }) {
-    console.log(featuredList);
+    // console.log(featuredList);
     return (
         <motion.div
             variants={containerVariants}

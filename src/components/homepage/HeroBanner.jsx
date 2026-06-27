@@ -21,7 +21,7 @@ export default function HeroBanner() {
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
-        console.log("Searching for:", searchQuery);
+        // console.log("Searching for:", searchQuery);
     };
 
     const containerVariants = {

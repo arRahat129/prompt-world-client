@@ -11,7 +11,7 @@ import { getPlanById } from '@/lib/api/plans';
 
 export default async function AddNewPrompt() {
     const user = await getUserSession();
-    console.log(user);
+    // console.log(user);
 
     if (!user) {
         redirect(`/auth/signin?redirect=/dashboard/${user?.role}/add-prompt`);
@@ -19,10 +19,10 @@ export default async function AddNewPrompt() {
 
     const myPrompts = await getCreatorPrompts(user?.id) || [];
     const totalPrompts = myPrompts.length;
-    console.log(totalPrompts);
+    // console.log(totalPrompts);
 
     const plan = await getPlanById(user?.plan || 'user_free');
-    console.log(plan);
+    // console.log(plan);
 
 
     // Calculate restrictions safely using actual layout statistics

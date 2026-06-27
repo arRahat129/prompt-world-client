@@ -45,7 +45,7 @@ const AllPromptsPage = async ({ searchParams }) => {
     const responseData = await filterPrompts(params) || { total: 0, prompts: [] };
 
     const prompts = responseData?.prompts ?? (Array.isArray(responseData) ? responseData : []);
-    console.log(prompts);
+    // console.log(prompts);
 
     const total = responseData.total || prompts.length || 0;
 

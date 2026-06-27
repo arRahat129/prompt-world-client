@@ -10,7 +10,7 @@ const FeaturedPrompts = async () => {
     const response = await getFeaturedPrompts();
 
     const featuredList = response?.data || [];
-    console.log(featuredList);
+    // console.log(featuredList);
     return (
         <section className="w-full max-w-7xl mx-auto px-4 py-12">
             <div className="flex flex-col mb-8 text-left space-y-2">

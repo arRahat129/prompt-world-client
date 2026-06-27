@@ -10,7 +10,7 @@ export default function SidebarFooter() {
     const router = useRouter();
     const { data: session, isPending } = useSession();
     const user = session?.user;
-    console.log(user)
+    // console.log(user)
 
     if (isPending) {
         return (

@@ -5,10 +5,10 @@ import { getUserBookmarks } from '@/lib/api/bookmarks';
 
 export default async function Page() {
     const user = await getUserSession();
-    console.log(user);
+    // console.log(user);
 
     const initialBookmarks = await getUserBookmarks(user.id);
-    console.log(initialBookmarks)
+    // console.log(initialBookmarks)
 
     return (
         <div className="max-w-5xl mx-auto p-6">

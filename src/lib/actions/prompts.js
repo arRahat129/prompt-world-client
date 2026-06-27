@@ -34,7 +34,7 @@ export const incrementPromptCopyCount = async (promptId) => {
 
 
 // export const createPrompt = async (newPromptData) => {
-//     console.log(newPromptData)
+//     // console.log(newPromptData)
 //     const res = await fetch(`${baseUrl}/api/prompts`, {
 //         method: 'POST',
 //         headers: {

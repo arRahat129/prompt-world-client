@@ -3,7 +3,7 @@
 import { serverFetch } from "../core/server";
 
 export const getUserBookmarks = async (userId) => {
-    console.log(userId)
+    // console.log(userId)
     try {
         return await serverFetch(`/api/bookmarks?userId=${userId}`);
     } catch (error) {

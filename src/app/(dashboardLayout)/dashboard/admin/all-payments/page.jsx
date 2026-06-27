@@ -4,7 +4,7 @@ import React from 'react';
 
 const AllPaymentsPage = async () => {
     const payments = await allPayments();
-    console.log(payments);
+    // console.log(payments);
     return (
         <div className="p-6 min-h-screen">
             <div className="mb-4">

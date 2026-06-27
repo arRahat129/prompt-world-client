@@ -15,13 +15,13 @@ const isNextRedirect = (error) => {
 export const authHeader = async () => {
     const token = await getJwtToken();
 
-    console.log("JWT exists:", !!token);
+    // console.log("JWT exists:", !!token);
 
     const header = token ? {
         authorization: `Bearer ${token}`
     } : {};
 
-    console.log(header);
+    // console.log(header);
 
     return header;
 }
@@ -49,7 +49,7 @@ export const serverFetch = async (path) => {
             cache: 'no-store'
         });
 
-        console.log(res);
+        // console.log(res);
 
         return await handleStatusCode(res);
     } catch (error) {
@@ -77,7 +77,7 @@ export const serverMutation = async (path, data, method = "POST") => {
 };
 
 export const handleStatusCode = async (res) => {
-    console.log(res.status);
+    // console.log(res.status);
     if (res.status === 401) {
         redirect('/unauthorized');
     }

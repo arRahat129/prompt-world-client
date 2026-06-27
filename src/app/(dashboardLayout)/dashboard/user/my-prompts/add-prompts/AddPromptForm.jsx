@@ -27,7 +27,7 @@ export default function AddPromptForm() {
     const [isUploading, setIsUploading] = useState(false);
 
     const { data: session, ispending } = useSession();
-    console.log(session?.user);
+    // console.log(session?.user);
 
     if (ispending) {
         return;
@@ -80,7 +80,7 @@ export default function AddPromptForm() {
         if (!data.category) newErrors.category = "Category selection is required";
         if (!data.aiTool) newErrors.aiTool = "Target AI tool configuration is required";
 
-        console.log("Validation errors:", newErrors);
+        // console.log("Validation errors:", newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);

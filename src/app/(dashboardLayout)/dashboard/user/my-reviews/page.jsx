@@ -19,7 +19,7 @@ const MyReviews = async () => {
     let reviews = [];
     try {
         reviews = await getReviewsByUserId(user?.id);
-        console.log(reviews?.data);
+        // console.log(reviews?.data);
     } catch (error) {
         console.error("Failed to compile user reviews on server:", error);
     }

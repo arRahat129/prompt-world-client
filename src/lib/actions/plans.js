@@ -17,7 +17,7 @@ export const createPayment = async (planId) => {
             email: user.email
         };
 
-        console.log("Dispatching valid backend payload:", payload);
+        // console.log("Dispatching valid backend payload:", payload);
         return await serverMutation('/api/payments', payload);
     } catch (error) {
         console.error("Payment action execution failure:", error);

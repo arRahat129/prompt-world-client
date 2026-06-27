@@ -5,7 +5,7 @@ import { FiUsers, FiCpu, FiCopy, FiDollarSign } from 'react-icons/fi';
 
 const AdminHomePage = async () => {
     const response = await adminAnalytics();
-    console.log(response);
+    // console.log(response);
 
     if (!response || !response.success) {
         return (

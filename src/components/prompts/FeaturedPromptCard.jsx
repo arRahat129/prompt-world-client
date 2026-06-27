@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const FeaturedPromptCard = ({ prompt }) => {
-    console.log(prompt);
+    // console.log(prompt);
     const {
         promptId,
         title = "Untitled Prompt",

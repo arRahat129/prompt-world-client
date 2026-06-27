@@ -13,7 +13,7 @@ const Leaderboard = () => {
         const fetchLeaderboardData = async () => {
             try {
                 const response = await getLeaderboard();
-                console.log(response);
+                // console.log(response);
                 if (response?.success) {
                     setCreators(response.data || []);
                 }

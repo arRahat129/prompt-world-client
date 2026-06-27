@@ -8,7 +8,7 @@ import { getUserSession } from '@/lib/core/session';
 const PromptReviewSection = async ({ prompt, isLocked, isCreatorViewer, isOwner }) => {
     // console.log(prompt);
     const user = await getUserSession();
-    console.log(user);
+    // console.log(user);
 
     const isProUser = user?.plan?.toLowerCase() === 'user_pro';
 

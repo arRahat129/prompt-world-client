@@ -9,7 +9,7 @@ import { FiEdit2, FiEye, FiTrash2 } from 'react-icons/fi';
 const ActionButtons = ({ prompt, isDeleting, handleDelete }) => {
     const { data: session } = useSession();
     const user = session?.user;
-    console.log({ user, prompt });
+    // console.log({ user, prompt });
 
     const router = useRouter();
 

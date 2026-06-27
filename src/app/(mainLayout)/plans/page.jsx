@@ -13,12 +13,12 @@ export default function PlansPage() {
 
     const searchParams = useSearchParams();
     const redirectTo = searchParams.get('redirect');
-    console.log(redirectTo);
+    // console.log(redirectTo);
 
     const userRole = session?.user?.role;
-    console.log(userRole);
+    // console.log(userRole);
     const currentPlanId = session?.user?.plan;
-    console.log(currentPlanId);
+    // console.log(currentPlanId);
 
     const [billingTarget, setBillingTarget] = useState(() => {
         return session?.user?.role === 'creator' ? 'creator' : 'user';

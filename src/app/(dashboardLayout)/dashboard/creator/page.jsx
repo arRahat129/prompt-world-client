@@ -13,7 +13,7 @@ export default async function CreatorDashboardPage() {
 
     try {
         const response = await creatorAnalytics();
-        console.log(response);
+        // console.log(response);
         if (response?.success) {
             analyticsData = response;
         }

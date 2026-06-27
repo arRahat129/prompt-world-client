@@ -11,7 +11,7 @@ const AllUsers = async ({ searchParams }) => {
     const responseData = await allUsers(queryString) || { total: 0, users: [] };
 
     const users = responseData?.users ?? (Array.isArray(responseData) ? responseData : []);
-    console.log(users);
+    // console.log(users);
     const total = responseData?.total ?? users.length;
     return (
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">

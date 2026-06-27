@@ -9,11 +9,11 @@ import { createBookmark } from '@/lib/actions/bookmarks';
 import Link from 'next/link';
 
 export default function BookmarksDisplay({ initialBookmarks, user }) {
-    console.log(initialBookmarks, user);
+    // console.log(initialBookmarks, user);
     const router = useRouter();
 
     const [bookmarks, setBookmarks] = useState(initialBookmarks || []);
-    console.log(bookmarks)
+    // console.log(bookmarks)
     const [isRemovingId, setIsRemovingId] = useState(null);
 
     const handleRemoveBookmark = async (item) => {

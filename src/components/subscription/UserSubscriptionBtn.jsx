@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation';
 
 const UserSubscriptionBtn = ({ price, redirectTo }) => {
     const router = useRouter();
-    console.log(redirectTo);
+    // console.log(redirectTo);
     
     const handleSubscription = () => {
-        console.log(`Initiating subscription logic for $${price}`);
+        // console.log(`Initiating subscription logic for $${price}`);
         router.push(`/plans${redirectTo || ''}`);
     };
 

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { createBookmark } from '@/lib/actions/bookmarks';
 
 export default function BookmarkButton({ prompt, user, promptId }) {
-    console.log(prompt);
+    // console.log(prompt);
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);

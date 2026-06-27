@@ -22,7 +22,7 @@ const PromptDetailsSide = ({ prompt, isOwner, isCreatorViewer }) => {
             try {
                 setIsLoading(true);
                 const reviews = await getReviewsByPromptId(prompt._id);
-                console.log(reviews);
+                // console.log(reviews);
 
                 if (reviews && reviews.length > 0) {
                     const totalRatingSum = reviews.reduce((acc, review) => acc + Number(review.rating || 0), 0);
