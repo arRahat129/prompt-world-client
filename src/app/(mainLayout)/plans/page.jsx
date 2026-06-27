@@ -56,10 +56,10 @@ export default function PlansPage() {
                 description: "Essential features for getting started and organizing your initial search tracking.",
                 icon: <FiUser size={18} className="opacity-60" />,
                 features: [
-                    "Browse & save up to 10 jobs",
-                    "Apply to up to 3 jobs per month",
+                    "Browse & save prompts",
+                    "Copy and see Public Prompts",
                     "Basic profile page",
-                    "Standard email alerts"
+                    "Review Providing is unavailable"
                 ],
                 buttonText: "Current Plan",
                 isPopular: false,
@@ -75,9 +75,9 @@ export default function PlansPage() {
                 icon: <FiCheck size={18} className="text-primary" />,
                 features: [
                     "see all prompts public or private forever",
-                    "Unlimited saved jobs",
-                    "Advanced application tracking dashboard",
-                    "Comprehensive salary insights"
+                    "Copy and see All Prompts",
+                    "Can Create Prompts More (10)",
+                    "Review Providing Available"
                 ],
                 buttonText: "Upgrade to Pro",
                 isPopular: true,
@@ -126,16 +126,24 @@ export default function PlansPage() {
 
     const faqs = [
         {
+            question: 'What is the difference between a User and a Creator plan?',
+            answer: 'User plans are built for candidates and enthusiasts looking to browse, save, copy, and review prompts to accelerate their goals. Creator plans are dedicated workflows for technical asset developers who want to upload, distribute, and track performance analytics on their own custom prompt configurations within our public repository.'
+        },
+        {
+            question: 'Can I change my role from User to Creator later?',
+            answer: 'Yes. Your pricing dashboard dynamically matches your active profile role settings. If you need to scale from browsing prompts to listing assets, you can switch your functional track directly within your central account configuration panel.'
+        },
+        {
+            question: 'What happens to my active prompt allocations if I downgrade?',
+            answer: 'If you downgrade your Creator track to the free tier, your top 3 most recently modified prompts will remain active in the public repository, while additional slots will be temporarily paused until your workspace is scaled back up.'
+        },
+        {
             question: 'Can I cancel my subscription at any time?',
-            answer: 'Yes, absolutely. All our premium tiers operate on flexible, non-binding month-to-month subscription structures. You can easily modify, downgrade, or cancel your renewal configurations through your profile billing dashboard settings at any time with no penalties.'
+            answer: 'Yes, absolutely. All our premium tiers operate on flexible, non-binding subscription structures. You can easily modify, downgrade, or cancel your renewal configurations through your profile billing dashboard settings at any time with no penalties.'
         },
         {
             question: 'How do refunds work if I change my mind?',
-            answer: 'We maintain a 14-day satisfaction policy. If you determine the premium features aren’t a proper fit for your current search or hiring sequence within your initial two weeks of service, reach out to support for a complete refund.'
-        },
-        {
-            question: 'What payment methods do you accept?',
-            answer: 'We support all major international credit/debit networks including Visa, Mastercard, American Express, and Discover. Enterprise-grade recruiters also have options to establish monthly or annual invoicing arrangements via bank wire transfers.'
+            answer: 'We maintain a 14-day satisfaction policy. If you determine the premium features aren’t a proper fit for your current search or asset distribution pipeline within your initial two weeks of service, reach out to support for a complete refund.'
         }
     ];
 

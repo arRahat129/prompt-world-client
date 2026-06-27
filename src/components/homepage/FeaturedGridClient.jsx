@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import PromptCard from '../prompts/PromptCard';
+import FeaturedPromptCard from '../prompts/FeaturedPromptCard';
 
 const containerVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -17,6 +17,7 @@ const containerVariants = {
 };
 
 export default function FeaturedGridClient({ featuredList }) {
+    console.log(featuredList);
     return (
         <motion.div
             variants={containerVariants}
@@ -26,9 +27,9 @@ export default function FeaturedGridClient({ featuredList }) {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
             {featuredList.map((prompt) => (
-                <PromptCard
+                <FeaturedPromptCard
                     key={prompt._id}
-                    prompt={{ ...prompt, _id: prompt.promptId }}
+                    prompt={prompt}
                 />
             ))}
         </motion.div>
