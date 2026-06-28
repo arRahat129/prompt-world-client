@@ -5,6 +5,7 @@ import { Bell, Envelope, Gear, House, Magnifier, Person } from "@gravity-ui/icon
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
+import { FcFeedback } from "react-icons/fc";
 
 const SidebarLinks = ({ user }) => {
     const pathname = usePathname();
@@ -17,6 +18,7 @@ const SidebarLinks = ({ user }) => {
         { icon: Gear, href: `/dashboard/${user?.role}/my-bookmarks`, label: "Saved Prompts" },
         { icon: Bell, href: `/dashboard/${user?.role}/my-reviews`, label: "My Reviews" },
         { icon: Person, href: `/dashboard/${user?.role}/my-profile`, label: "Profile" },
+        { icon: FcFeedback, href: `/dashboard/${user?.role}/feedbacks`, label: "Prompt Feedback" },
     ];
     
     const creatorNavlinks = [
@@ -25,6 +27,7 @@ const SidebarLinks = ({ user }) => {
         { icon: FaPlus, href: `/dashboard/${user?.role}/my-prompts/add-prompts`, label: "Add Prompt" },
         { icon: Magnifier, href: `/dashboard/${user?.role}/my-prompts`, label: "My Prompts" },
         { icon: Gear, href: `/dashboard/${user?.role}/bookmarks`, label: "Bookmarks" },
+        { icon: FcFeedback, href: `/dashboard/${user?.role}/feedbacks`, label: "Prompt Feedback" },
     ];
 
     const adminNavlinks = [
