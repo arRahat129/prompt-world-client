@@ -5,9 +5,11 @@ import { Button } from '@heroui/react';
 import { FiCopy, FiCheck } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { incrementPromptCopyCount } from '@/lib/actions/prompts';
+import { useRouter } from 'next/navigation';
 
 const CopyButton = ({ textToCopy, promptId, creatorId, userId }) => {
     const [copied, setCopied] = useState(false);
+    const router = useRouter();
 
     const handleCopy = async () => {
         try {
@@ -22,6 +24,8 @@ const CopyButton = ({ textToCopy, promptId, creatorId, userId }) => {
                     console.error('Metrics increment failed: ', err)
                 );
             }
+
+            router.push(`/prompts/${promptId}`);
 
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {

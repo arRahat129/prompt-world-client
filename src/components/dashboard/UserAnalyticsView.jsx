@@ -14,7 +14,7 @@ import {
 } from 'recharts';
 
 export default function UserAnalyticsView({ data }) {
-    console.log(data);
+    // console.log(data);
     const { asUserBars = [], asCreatorBars = [] } = data || {};
 
     const tooltipStyle = {

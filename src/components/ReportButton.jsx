@@ -9,12 +9,15 @@ import {
 import { FiFlag } from "react-icons/fi";
 import { createReport } from "@/lib/actions/reports";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const ReportButton = ({ promptId }) => {
     const [reportType, setReportType] = useState("");
     const [reason, setReason] = useState("");
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+
+    const router = useRouter();
 
     const handleReset = () => {
         setReason("");
@@ -47,6 +50,7 @@ const ReportButton = ({ promptId }) => {
             if (response?.success) {
                 toast.success('Reported Successfully!')
                 handleReset();
+                router.push(`/prompts/${promptId}`);
 
                 const nativeCloseButton = document.querySelector(
                     "[data-modal-close-trigger]"
