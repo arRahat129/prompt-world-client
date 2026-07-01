@@ -7,7 +7,7 @@ import { useSession } from '@/lib/auth-client';
 
 export default function SuccessVerificationContent() {
     const searchParams = useSearchParams();
-    const { data: session } = useSession();
+    const { data: session, refetch } = useSession();
     const user = session?.user;
     // console.log(user);
     const router = useRouter();
@@ -34,19 +34,23 @@ export default function SuccessVerificationContent() {
         const verifyCheckout = async () => {
             try {
                 const response = await createPayment(targetPlanId);
-                // console.log(response);
 
                 if (response?.success) {
                     setStatusMessage('Success! Your premium privileges are now fully active.');
+
+                    if (typeof refetch === 'function') {
+                        await refetch();
+                    }
+
                     setVerificationSuccess(true);
                 } else {
                     if (response?.message?.toLowerCase().includes('already') || response?.status === 400) {
                         setStatusMessage('Account already upgraded! Forwarding to validation view...');
-                        router.push('/plans/alreadyPaid');
+                        setVerificationSuccess(true); // 💡 Safe fallback: let them proceed!
                     } else {
                         setStatusMessage(`Sync Verification Error: ${response?.message || 'Database validation anomaly.'}`);
+                        setIsProcessing(false);
                     }
-                    setIsProcessing(false);
                 }
             } catch (err) {
                 setStatusMessage('A network pipeline error occurred. Please verify your profile dashboard.');
@@ -55,7 +59,7 @@ export default function SuccessVerificationContent() {
         };
 
         verifyCheckout();
-    }, [hasValidParams, targetPlanId, router]);
+    }, [hasValidParams, targetPlanId, router, refetch]);
 
     useEffect(() => {
         if (!verificationSuccess) return;
@@ -63,8 +67,8 @@ export default function SuccessVerificationContent() {
         if (user && user.role) {
             const targetRedirect = redirectPath || `/dashboard/${user.role}` || '/';
             const timer = setTimeout(() => {
-                router.push(targetRedirect);
-            }, 2000);
+                window.location.href = targetRedirect;
+            }, 1500);
 
             return () => clearTimeout(timer);
         }

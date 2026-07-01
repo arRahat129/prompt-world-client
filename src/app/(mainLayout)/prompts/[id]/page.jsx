@@ -14,10 +14,13 @@ import PromptReviewSection from '@/components/promptDetails/PromptReviewSection'
 import BookmarkButton from '@/components/BookmarkButton';
 import BackToPreviousPage from '@/components/BackToPreviousPage';
 import ReportButton from '@/components/ReportButton';
+import { getSingleUser } from '@/lib/api/user';
 
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    // console.log(sessionUser);
+    const user = await getSingleUser(sessionUser.id);
     // console.log(user);
 
     if (!user) {
@@ -68,6 +71,8 @@ const PromptDetailsPage = async ({ params }) => {
     const isCreatorPro = user?.plan?.toLowerCase() === 'creator_pro';
 
     const isLocked = prompt.visibility?.toLowerCase() !== 'public' && !isOwner && !isProUser && !isCreatorPro;
+
+    console.log('id:', id, 'user', user, 'prompt', prompt, 'isOwner', isOwner, 'isCreatorViewer', isCreatorViewer, 'isProUser', isProUser, 'iscreatorPro', isCreatorPro)
 
     return (
         <div className="w-full min-h-screen py-12 px-4 max-w-7xl mx-auto space-y-12">
