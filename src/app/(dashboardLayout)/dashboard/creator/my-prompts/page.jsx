@@ -6,7 +6,7 @@ import React from 'react';
 
 const MyPrompts = async () => {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);
     // console.log(user);
     const prompts = await getCreatorPrompts(user?._id);
 

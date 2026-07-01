@@ -11,7 +11,7 @@ import { getCreatorPrompts } from '@/lib/api/prompts';
 
 const MyProfile = async () => {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
     const myPrompts = await getCreatorPrompts(user?._id);
     const totalPrompts = myPrompts.length;
 

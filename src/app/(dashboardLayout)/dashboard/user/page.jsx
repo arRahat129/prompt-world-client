@@ -14,8 +14,10 @@ export default async function UserDashboardStatsPage() {
 
     try {
         const response = await userAnalytics();
+        console.log(response);
         if (response?.success) {
             analyticsData = response;
+            console.log(analyticsData);
         }
     } catch (error) {
         console.error("Failed to pre-fetch consumer stats layer context:", error);

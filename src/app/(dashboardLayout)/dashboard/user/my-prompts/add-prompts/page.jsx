@@ -12,7 +12,7 @@ import { getPlanById } from '@/lib/api/plans';
 
 export default async function AddNewPrompt() {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
     // console.log(user);
 
     if (!user) {

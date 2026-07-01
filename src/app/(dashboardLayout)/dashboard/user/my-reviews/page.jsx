@@ -12,7 +12,7 @@ export const metadata = {
 
 const MyReviews = async () => {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
     // console.log(user);
 
     if (!user) {

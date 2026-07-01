@@ -6,7 +6,7 @@ import { getUserBookmarks } from '@/lib/api/bookmarks';
 
 export default async function Page() {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
     // console.log(user);
 
     const initialBookmarks = await getUserBookmarks(user._id);

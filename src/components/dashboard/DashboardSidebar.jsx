@@ -8,7 +8,7 @@ import { getSingleUser } from "@/lib/api/user";
 
 const DashboardSidebar = async () => {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
     console.log(sessionUser, user);
 
 

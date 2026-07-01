@@ -19,7 +19,7 @@ import ReportButton from '@/components/ReportButton';
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
     // console.log(user);
 
     if (!user) {

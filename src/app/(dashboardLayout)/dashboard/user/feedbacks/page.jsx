@@ -6,7 +6,7 @@ import React from 'react';
 
 const FeedbackPage = async () => {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
     // console.log(user);
 
     const response = user?._id ? await getFeedbacksByCreatorId(user._id) : null;

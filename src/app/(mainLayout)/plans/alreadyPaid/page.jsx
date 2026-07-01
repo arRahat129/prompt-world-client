@@ -6,7 +6,7 @@ import { getUserSession } from '@/lib/core/session';
 
 export default async function AlreadyPaidPage() {
     const sessionUser = await getUserSession();
-    const user = await getSingleUser(sessionUser.id);
+    const user = await getSingleUser(sessionUser?.id);;
 
     const dashboardPath = user?.role ? `/dashboard/${user.role}` : '/dashboard';
 
