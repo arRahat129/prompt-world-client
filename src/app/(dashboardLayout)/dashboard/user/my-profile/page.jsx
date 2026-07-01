@@ -5,12 +5,14 @@ import {
     FiMail, FiCheckCircle, FiUser, FiCode, FiLayers
 } from 'react-icons/fi';
 import { FaGem } from 'react-icons/fa6';
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 import { getCreatorPrompts } from '@/lib/api/prompts';
 
 const MyProfile = async () => {
-    const user = await getUserSession();
-    const myPrompts = await getCreatorPrompts(user?.id);
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
+    const myPrompts = await getCreatorPrompts(user?._id);
     const totalPrompts = myPrompts.length;
 
     // Unauthenticated State

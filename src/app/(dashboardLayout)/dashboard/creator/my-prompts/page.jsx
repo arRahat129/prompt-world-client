@@ -1,12 +1,14 @@
 import PromptsTable from '@/components/dashboard/PromptsTable';
 import { getCreatorPrompts } from '@/lib/api/prompts';
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 import React from 'react';
 
 const MyPrompts = async () => {
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
     // console.log(user);
-    const prompts = await getCreatorPrompts(user?.id);
+    const prompts = await getCreatorPrompts(user?._id);
 
     return (
         <div className="min-h-screen p-6 sm:p-8">

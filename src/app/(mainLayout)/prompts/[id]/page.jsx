@@ -6,6 +6,7 @@ import {
     FiLock
 } from "react-icons/fi";
 import { getSinglePrompt } from '@/lib/api/prompts';
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 import Link from 'next/link';
 import PromptContentArea from '@/components/promptDetails/PromptContentArea';
@@ -14,12 +15,10 @@ import PromptReviewSection from '@/components/promptDetails/PromptReviewSection'
 import BookmarkButton from '@/components/BookmarkButton';
 import BackToPreviousPage from '@/components/BackToPreviousPage';
 import ReportButton from '@/components/ReportButton';
-import { getSingleUser } from '@/lib/api/user';
 
 const PromptDetailsPage = async ({ params }) => {
     const { id } = await params;
     const sessionUser = await getUserSession();
-    // console.log(sessionUser);
     const user = await getSingleUser(sessionUser.id);
     // console.log(user);
 

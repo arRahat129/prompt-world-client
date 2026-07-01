@@ -1,10 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiArrowRight, FiShield, FiCheckCircle } from 'react-icons/fi';
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 
 export default async function AlreadyPaidPage() {
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
 
     const dashboardPath = user?.role ? `/dashboard/${user.role}` : '/dashboard';
 

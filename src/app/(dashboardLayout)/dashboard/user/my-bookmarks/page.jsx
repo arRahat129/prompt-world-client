@@ -1,13 +1,15 @@
 import React from 'react';
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 import BookmarksDisplay from '@/components/dashboard/BookmarkDisplay';
 import { getUserBookmarks } from '@/lib/api/bookmarks';
 
 export default async function Page() {
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
     // console.log(user);
 
-    const initialBookmarks = await getUserBookmarks(user.id);
+    const initialBookmarks = await getUserBookmarks(user._id);
     // console.log(initialBookmarks)
 
     return (

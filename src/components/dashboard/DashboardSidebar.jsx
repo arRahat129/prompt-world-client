@@ -4,9 +4,13 @@ import SidebarFooter from "./SidebarFooter";
 import { getUserSession } from "@/lib/core/session";
 import SidebarLinks from "./SidebarLinks";
 import SidebarHeader from "../SidebardHeader";
+import { getSingleUser } from "@/lib/api/user";
 
 const DashboardSidebar = async () => {
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
+    console.log(sessionUser, user);
+
 
     return (
         <>

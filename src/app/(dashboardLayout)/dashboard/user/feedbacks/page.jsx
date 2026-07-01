@@ -1,13 +1,15 @@
 import FeedbackDisplay from '@/components/dashboard/FeedbackDisplay';
 import { getFeedbacksByCreatorId } from '@/lib/api/feedbacks';
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 import React from 'react';
 
 const FeedbackPage = async () => {
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
     // console.log(user);
 
-    const response = user?.id ? await getFeedbacksByCreatorId(user.id) : null;
+    const response = user?._id ? await getFeedbacksByCreatorId(user._id) : null;
     // console.log(response);
     const feedbacksList = response?.feedback || [];
     // console.log(feedbacksList, feedbacksList[0].prompt);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { redirect } from "next/navigation";
 import { getReviewsByUserId } from "@/lib/api/reviews";
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 import MyReviewsTable from '@/components/dashboard/MyReviewsTable';
 
@@ -10,7 +11,9 @@ export const metadata = {
 };
 
 const MyReviews = async () => {
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
+    // console.log(user);
 
     if (!user) {
         redirect("/auth/signin");
@@ -18,7 +21,7 @@ const MyReviews = async () => {
 
     let reviews = [];
     try {
-        reviews = await getReviewsByUserId(user?.id);
+        reviews = await getReviewsByUserId(user?._id);
         // console.log(reviews?.data);
     } catch (error) {
         console.error("Failed to compile user reviews on server:", error);

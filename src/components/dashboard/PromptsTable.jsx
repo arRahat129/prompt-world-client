@@ -59,6 +59,7 @@ export default function PromptsTable({ initialPrompts, user }) {
 
     const approvedPrompts = prompts.filter(p => p.status !== 'pending');
     const pendingPrompts = prompts.filter(p => p.status === 'pending');
+    // console.log(user);
 
     const renderRow = (prompt, isPending) => (
         <Table.Row key={prompt._id} className="hover:bg-zinc-900/40 transition-colors border-b border-zinc-900/50">

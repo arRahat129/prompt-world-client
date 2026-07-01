@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@heroui/react";
 import { FiArrowLeft, FiAlertTriangle } from "react-icons/fi";
 import AddPromptForm from './AddPromptForm';
+import { getSingleUser } from '@/lib/api/user';
 import { getUserSession } from '@/lib/core/session';
 import { redirect } from 'next/navigation';
 import { FaCrown } from 'react-icons/fa6';
@@ -10,14 +11,15 @@ import { getCreatorPrompts } from '@/lib/api/prompts';
 import { getPlanById } from '@/lib/api/plans';
 
 export default async function AddNewPrompt() {
-    const user = await getUserSession();
+    const sessionUser = await getUserSession();
+    const user = await getSingleUser(sessionUser.id);
     // console.log(user);
 
     if (!user) {
         redirect(`/auth/signin?redirect=/dashboard/${user?.role}/add-prompt`);
     }
 
-    const myPrompts = await getCreatorPrompts(user?.id) || [];
+    const myPrompts = await getCreatorPrompts(user?._id) || [];
     // console.log(myPrompts);
     const totalPrompts = myPrompts.length;
     // console.log(totalPrompts);

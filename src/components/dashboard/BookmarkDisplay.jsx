@@ -21,7 +21,7 @@ export default function BookmarksDisplay({ initialBookmarks, user }) {
         try {
             const res = await createBookmark({
                 promptId: item.promptId,
-                userId: user?.id || user?._id,
+                userId: user?._id,
             });
 
             if (res.success && !res.isBookmarked) {

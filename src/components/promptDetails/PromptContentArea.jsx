@@ -21,7 +21,7 @@ const PromptContentArea = ({ prompt, isLocked, user, isOwner, redirectTo }) => {
                     <h3 className="text-sm font-bold uppercase tracking-wider">Prompt Template</h3>
                     {
                         !isCopyLocked &&
-                        <CopyButton textToCopy={prompt.content} promptId={prompt._id} creatorId={prompt.creatorId} userId={user.id} />
+                        <CopyButton textToCopy={prompt.content} promptId={prompt._id} creatorId={prompt.creatorId} userId={user._id} />
                     }
                 </div>
                 <div className="relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 min-h-55 flex items-center justify-center">
