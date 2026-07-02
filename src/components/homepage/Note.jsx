@@ -26,8 +26,14 @@ const Note = () => {
                         Note
                     </h2>
 
-                    <p className="mt-5 text-sm md:text-base leading-8 text-slate-600 dark:text-slate-300">
+                    {/* <p className="mt-5 text-sm md:text-base leading-8 text-slate-600 dark:text-slate-300">
                         This is not a requirement output. This is just a Thank you for using this app. While creating the app, I faced some issues. Do not know its actually an error or just my network problem. Sometime after updating any data, it is not actually updating in the UI without a re-login. As payment functionality. After payment it still shows locks. If you face this error, do not panic, just <strong className='text-lg'>Re-Login</strong>. Sorry about this trouble. Hope to fix it soon...
+                        <br />
+                        <span className='flex justify-end font-bold text-2xl text-sky-500 dark:text-sky-200'>Thank You</span>
+                    </p> */}
+
+                    <p className="mt-5 text-sm md:text-base leading-8 text-slate-600 dark:text-slate-300">
+                        This is not a requirement output. This is just a Thank you for using this app. If you face any kind of issues, contact us. Sometime after updating any data, if there is any UI update then re-load.
                         <br />
                         <span className='flex justify-end font-bold text-2xl text-sky-500 dark:text-sky-200'>Thank You</span>
                     </p>
